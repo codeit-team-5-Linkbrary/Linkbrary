@@ -1,3 +1,3 @@
 export default function Home() {
-  return <></>;
+  return <>테스트 입니다</>;
 }
