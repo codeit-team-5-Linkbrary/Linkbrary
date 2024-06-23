@@ -5,13 +5,10 @@ import styles from "../styles/Login.module.css";
 import Label from "@/components/Lable";
 import Input from "@/components/Input";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import Button from "@/components/Button";
 
 const LoginPage = () => {
   const [values, setValues] = useState({ email: "", password: "" });
-
-  const navigate = useNavigate();
-
   function handleChange(e) {
     const { name, value } = e.target;
 
@@ -60,6 +57,7 @@ const LoginPage = () => {
           value={values.password}
           onChange={handleChange}
         />
+        <Button className={styles.Button}>로그인</Button>
       </form>
     </>
   );

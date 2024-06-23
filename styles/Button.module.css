@@ -1,0 +1,27 @@
+.Button {
+  display: inline-block;
+  padding: 13px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+a.Button {
+  text-decoration: none;
+}
+
+.Button.primary {
+  color: #ffffff;
+  background-color: var(--primary-color);
+}
+
+.Button.secondary {
+  color: #000000;
+  background-color: #e7e7e7;
+}
+
+.Button.outline {
+  background-color: #ffffff;
+  border: 1px solid #e1e1e1;
+}
