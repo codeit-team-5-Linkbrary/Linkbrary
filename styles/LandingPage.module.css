@@ -1,5 +1,11 @@
 .header {
   background-color: var(--gray-100);
+  background-image: url("../public/asset/LandingHeader.png");
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: bottom;
+  background-size: 80%;
+  height: 953px;
   text-align: center;
   padding-top: 70px;
 }
@@ -7,6 +13,8 @@
 .header h1 {
   margin: 0;
   margin-bottom: 40px;
+  font-size: 64px;
+  line-height: 80px;
 }
 
 .header span {
@@ -16,12 +24,45 @@
   -webkit-background-clip: text;
 }
 
+.header img {
+  width: 50px;
+  height: 50px;
+}
+
 .contents {
   display: flex;
   flex-direction: column;
   max-width: 998px;
+  margin: 70px auto 0;
 }
 
+.contents h2 {
+  font-size: 48px;
+  letter-spacing: -0.3px;
+}
+
+.contents p {
+  font-weight: 500;
+  line-height: 24px;
+  color: #6b6b6b;
+}
+
+.saveContent,
+.managementContent,
+.shareContent,
+.searchContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 998px;
+  max-height: 450px;
+  margin: 50px 0;
+}
+
+.managementContent .leftImages,
+.searchContent .leftImages {
+  order: -1;
+}
 .saveContent span {
   background: linear-gradient(90deg, #fe8a8a, #a4ceff);
 }
@@ -42,4 +83,23 @@
   color: transparent;
   background-clip: text;
   -webkit-background-clip: text;
+}
+
+/* 태블릿 */
+@media (max-width: 1199px) {
+  .header {
+    height: 756px;
+  }
+}
+
+/* 모바일 */
+@media (max-width: 390px) {
+  .header {
+    height: 399px;
+  }
+
+  .header h1 {
+    font-size: 33px;
+    line-height: 42px;
+  }
 }
