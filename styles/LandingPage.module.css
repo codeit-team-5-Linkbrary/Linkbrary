@@ -1,0 +1,45 @@
+.header {
+  background-color: var(--gray-100);
+  text-align: center;
+  padding-top: 70px;
+}
+
+.header h1 {
+  margin: 0;
+  margin-bottom: 40px;
+}
+
+.header span {
+  background: linear-gradient(90deg, var(--primary), #ff9f9f);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.contents {
+  display: flex;
+  flex-direction: column;
+  max-width: 998px;
+}
+
+.saveContent span {
+  background: linear-gradient(90deg, #fe8a8a, #a4ceff);
+}
+
+.managementContent span {
+  background: linear-gradient(90deg, #6fbaff, #ffd88b);
+}
+
+.shareContent span {
+  background: linear-gradient(90deg, #6d7ccd, #528885 22%);
+}
+
+.searchContent span {
+  background: linear-gradient(90deg, #fe578f, #68e8f9);
+}
+
+.contents span {
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
