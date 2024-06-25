@@ -22,26 +22,28 @@ export default function AddLink() {
   };
 
   return (
-    <div className={styles.linkBox}>
-      <div className={styles.imageContainer}>
-        <Image
-          src="/asset/LoadLink.svg"
-          alt="링크 찾기"
-          className={styles.image}
-          width={20}
-          height={20}
+    <div className={styles.linkContainer}>
+      <div className={styles.linkBox}>
+        <div className={styles.imageContainer}>
+          <Image
+            src="/asset/LoadLink.svg"
+            alt="링크 찾기"
+            className={styles.image}
+            width={20}
+            height={20}
+          />
+        </div>
+        <input
+          type="text"
+          placeholder="링크를 추가해 보세요"
+          className={styles.input}
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
         />
+        <Button type="Add" onClick={handleAddLink}>
+          추가하기
+        </Button>
       </div>
-      <input
-        type="text"
-        placeholder="링크를 추가해 보세요"
-        className={styles.input}
-        value={link}
-        onChange={(e) => setLink(e.target.value)}
-      />
-      <Button type="Add" onClick={handleAddLink}>
-        추가하기
-      </Button>
     </div>
   );
 }
