@@ -1,3 +1,7 @@
+.landingWrapper {
+  background-color: var(--gray-100);
+}
+
 .header {
   background-color: var(--gray-100);
   background-image: url("../public/asset/LandingHeader.png");
