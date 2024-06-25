@@ -9,6 +9,7 @@
   padding: 16px 20px 16px 20px;
   font-size: 18px;
   line-height: 21.48px;
+  white-space: nowrap;
   cursor: pointer;
 }
 
