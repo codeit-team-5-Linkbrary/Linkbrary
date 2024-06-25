@@ -1,1 +1,30 @@
 /*빈 페이지*/
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 200px;
+}
+
+.userSection {
+  margin-top: 13px;
+  margin-bottom: 12px;
+}
+
+.userInfo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userInfo span {
+  margin-left: 6px;
+  font-size: 14px;
+  line-height: 16.71px;
+  color: #373740;
+}
+
+.image {
+  width: 128px;
+  height: 28px;
+}
