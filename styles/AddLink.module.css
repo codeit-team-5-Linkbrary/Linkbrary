@@ -32,6 +32,7 @@
   .linkBox {
     max-width: 325px;
     height: 53px;
+    padding: 8px 10px 8px 10px;
   }
   .input {
     font-size: 14px;
