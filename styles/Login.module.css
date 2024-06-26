@@ -1,16 +1,8 @@
-.global {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100dvh;
-}
-
 .Label,
 .Input,
-.Button,
-.GoogleButton {
+.Button {
+  align-items: center;
   display: block;
-  width: 100%;
 }
 
 .Label {
@@ -22,6 +14,8 @@
 }
 
 .Button {
+  align-items: center;
+  color: blueviolet;
   font-size: 20px;
   font-weight: 700;
   margin: 40px 0 32px;
@@ -31,12 +25,6 @@
   margin: 32px 0;
 }
 
-.GoogleButton {
-  display: flex;
-  font-size: 18px;
-  justify-content: center;
+.Form {
   align-items: center;
-  gap: 12px;
-  margin: 24px 0;
-  color: #000000;
 }
