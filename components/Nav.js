@@ -23,7 +23,7 @@ function Nav() {
       <div className={styles.logoWrapper}>
         <Link href="/">
           <Image
-            src="/asset/Linkbrary.png"
+            src="/asset/Linkbrary.svg"
             alt="로고이미지"
             width={128}
             height={24}
@@ -32,14 +32,19 @@ function Nav() {
       </div>
       <div className={styles.userSection}>
         {isLoggIn ? (
-          <div className={styles.userInfo}>
-            <Image
-              src="/asset/account.png"
-              alt="유저이미지"
-              width={28}
-              height={28}
-            />
-            <span>{user?.name}</span>
+          <div className={styles.userWrapper}>
+            <Link href="/favorite">
+              <Button type="Bookmark">⭐즐겨찾기</Button>
+            </Link>
+            <div className={styles.userInfo}>
+              <Image
+                src="/asset/profileImg.svg"
+                alt="유저이미지"
+                width={28}
+                height={28}
+              />
+              <span>{user?.name}</span>
+            </div>
           </div>
         ) : (
           <Button type="LandingLogin" onClick={handleLinkClick}>

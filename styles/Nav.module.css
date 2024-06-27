@@ -4,6 +4,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 200px;
+  background-color: var(--gray-100);
 }
 
 .userSection {
@@ -11,14 +12,20 @@
   margin-bottom: 12px;
 }
 
+.userWrapper {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
 .userInfo {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 6px;
 }
 
 .userInfo span {
-  margin-left: 6px;
   font-size: 14px;
   line-height: 16.71px;
   color: #373740;
@@ -27,4 +34,16 @@
 .image {
   width: 128px;
   height: 28px;
+}
+
+/* 태블릿 */
+@media (max-width: 1199px) {
+  .nav {
+    padding: 13px 32px;
+  }
+
+  .logoWrapper {
+    width: 88.67px;
+    height: 16px;
+  }
 }
