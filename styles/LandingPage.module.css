@@ -3,7 +3,6 @@
 }
 
 .header {
-  background-color: var(--gray-100);
   background-image: url("../public/asset/LandingHeader.png");
   background-repeat: no-repeat;
   background-position-x: center;
@@ -37,7 +36,8 @@
   display: flex;
   flex-direction: column;
   max-width: 998px;
-  margin: 70px auto 0;
+  margin: 120px auto 0;
+  gap: 100px;
 }
 
 .contents h2 {
@@ -52,21 +52,21 @@
 }
 
 .saveContent,
-.managementContent,
 .shareContent,
+.managementContent,
 .searchContent {
   display: flex;
   justify-content: space-between;
   align-items: center;
   max-width: 998px;
   max-height: 450px;
-  margin: 50px 0;
 }
 
-.managementContent .leftImages,
-.searchContent .leftImages {
+.managementContent .imageContainer,
+.searchContent .imageContainer {
   order: -1;
 }
+
 .saveContent span {
   background: linear-gradient(90deg, #fe8a8a, #a4ceff);
 }
@@ -89,10 +89,61 @@
   -webkit-background-clip: text;
 }
 
+.imageContainer {
+  max-width: 550px;
+  max-height: 450px;
+  width: 100%;
+}
+
+.images {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5/4;
+}
+
+.images img {
+  border-radius: 15px;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.textContainer h2,
+.textContainer p {
+  margin: 0;
+}
+
 /* 태블릿 */
 @media (max-width: 1199px) {
   .header {
     height: 756px;
+  }
+
+  .contents {
+    margin: 80px auto 0;
+    padding: 0 33px;
+  }
+
+  .contents h2 {
+    line-height: 57.28px;
+  }
+
+  .saveContent,
+  .managementContent,
+  .shareContent,
+  .searchContent {
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .imageContainer {
+    max-width: 385px;
+    max-height: 315px;
+    width: 100%;
   }
 }
 
@@ -103,7 +154,46 @@
   }
 
   .header h1 {
-    font-size: 33px;
+    font-size: 32px;
     line-height: 42px;
+  }
+
+  .contents {
+    gap: 82px;
+    margin: 40px auto 0;
+  }
+
+  .contents h2 {
+    font-size: 24px;
+    line-height: 28.64px;
+    text-wrap: nowrap;
+  }
+
+  .contents h2 br,
+  .contents p br {
+    display: none;
+  }
+
+  .contents p {
+    font-size: 15px;
+    line-height: 22.5px;
+  }
+
+  .saveContent,
+  .managementContent,
+  .shareContent,
+  .searchContent {
+    flex-direction: column;
+  }
+
+  .contents .imageContainer {
+    order: 3;
+  }
+
+  .imageContainer {
+    max-width: 325px;
+    max-height: 265.91px;
+    width: 100%;
+    margin-top: 24px;
   }
 }
