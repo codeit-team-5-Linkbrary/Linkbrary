@@ -1,8 +1,8 @@
 .Label,
 .Input,
 .Button {
-  align-items: center;
   display: block;
+  width: 100%;
 }
 
 .Label {
@@ -26,5 +26,20 @@
 }
 
 .Form {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.SocialLoginbox {
   align-items: center;
+  justify-content: space-between;
+  width: 400px;
+  height: 66px;
+  background-color: E7EFFB;
+  margin: 30px;
+  padding: 5px;
+  border: 1px solid CCD5E3;
+  border-radius: 15px;
 }

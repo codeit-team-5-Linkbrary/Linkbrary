@@ -1,6 +1,15 @@
-POST  https://linkbrary-api.vercel.app/6-5/users
+POST  https://linkbrary-api.vercel.app/6-5/auth/sign-up/
 Content-Type: application/json
 
 {
-    "email": 'koreala1@naver.com'
+  "email": "korea2@naver.com",
+  "password": "naver",
+  "name": "yukijoo",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM0LCJpYXQiOjE3MTk0NTEzNzksImV4cCI6MTcxOTQ1ODU3OX0.DDNvAWtWP6ufs8nR0dvK9li10B8dQLhl33pEmeVTi7I"
 }
+
+###
+
+GET   https://linkbrary-api.vercel.app/
+Content-Type: application/json
+
