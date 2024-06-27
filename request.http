@@ -1,0 +1,6 @@
+POST  https://linkbrary-api.vercel.app/6-5/users
+Content-Type: application/json
+
+{
+    "email": 'koreala1@naver.com'
+}

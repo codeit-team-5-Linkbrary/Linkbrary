@@ -1,9 +1,30 @@
-.global {
-  display: flex;
-  justify-content: center;
+.Label,
+.Input,
+.Button {
   align-items: center;
-  min-height: 100dvh;
+  display: block;
 }
 
-.Login {
+.Label {
+  margin: 0;
+}
+
+.Input {
+  margin: 8px 0 24px;
+}
+
+.Button {
+  align-items: center;
+  color: blueviolet;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 40px 0 32px;
+}
+
+.HorizontalRule {
+  margin: 32px 0;
+}
+
+.Form {
+  align-items: center;
 }
