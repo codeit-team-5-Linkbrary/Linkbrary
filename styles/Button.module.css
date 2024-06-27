@@ -36,13 +36,41 @@
   height: 35px;
   border-radius: 5px;
   padding: 8px 12px 8px 12px;
-  background-image: none;
   background-color: var(--white);
+  line-height: 19.09px;
+}
+
+.Bookmark {
+  height: 37px;
+  border-radius: 4px;
+  padding: 10px 12px;
+  background-color: var(--gray-100);
+  font-size: 14px;
+  line-height: 16.71px;
+}
+
+.Select,
+.Bookmark,
+.ModalDelete {
+  background-image: none;
   border: 1px solid var(--primary);
   font-weight: 400;
+  color: #000000;
+}
+
+.Modal,
+.ModalDelete {
+  width: 280px;
+  height: 51px;
   font-size: 16px;
   line-height: 19.09px;
-  color: #000000;
+  border-radius: 8px;
+}
+
+.ModalDelete {
+  background-color: #ff5b56;
+  color: #f5f5f5;
+  border: none;
 }
 
 /* 태블릿 */
