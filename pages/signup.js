@@ -1,19 +1,19 @@
 import Link from "next/link";
-import LinkbraryLogo from "../public/asset/Linkbrary.svg";
+import LinkbraryLogo from "../public/asset/LinkbraryLogo.svg";
 import Logo from "../styles/Login.module.css";
 
-const Login = () => {
+const Signup = () => {
   return (
     <>
-      <civ className={Logo.global}>
+      <div className={Logo.AuthContainer}>
         <div className={Logo.Login}>
           <Link href="/">
             <LinkbraryLogo />
           </Link>
         </div>
-      </civ>
+      </div>
     </>
   );
 };
 
-export default Login;
+export default Signup;
