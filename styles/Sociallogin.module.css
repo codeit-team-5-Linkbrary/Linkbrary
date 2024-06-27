@@ -1,0 +1,20 @@
+.Container {
+  background-color: #e6f2ff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 23px;
+  margin: 24px 0;
+}
+
+.Title {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.SocialLoginLinksContainer {
+  display: flex;
+  gap: 16px;
+}

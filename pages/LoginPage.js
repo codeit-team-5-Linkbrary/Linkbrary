@@ -8,6 +8,7 @@ import { useState } from "react";
 import global from "../styles/LoginBox.module.css";
 import Button from "@/components/Button";
 import loginButton from "../styles/Button.module.css";
+import SocialLogin from "@/components/Sociallogin";
 
 const LoginPage = () => {
   const [values, setValues] = useState({ email: "", password: "" });
@@ -68,7 +69,7 @@ const LoginPage = () => {
           />
         </form>
         <Button>로그인</Button>
-        <div className={styles.SocialLoginbox}> 소셜 로그인 </div>
+        <SocialLogin />
       </div>
     </>
   );
