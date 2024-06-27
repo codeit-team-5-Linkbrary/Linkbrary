@@ -23,7 +23,7 @@ function Nav() {
       <div className={styles.logoWrapper}>
         <Link href="/">
           <Image
-            src="/asset/Linkbrary.svg"
+            src="/asset/LinkbraryLogo.svg"
             alt="로고이미지"
             width={128}
             height={24}
