@@ -6,7 +6,7 @@
   color: #f5f5f5;
   background: linear-gradient(90deg, var(--primary), #6ae3fe);
   height: 53px;
-  padding: 16px 20px 16px 20px;
+  padding: 16px 20px;
   font-size: 18px;
   line-height: 21.48px;
   white-space: nowrap;
@@ -23,7 +23,7 @@
 
 .Add {
   height: 37px;
-  padding: 10px 16px 10px 16px;
+  padding: 10px 16px;
   font-size: 14px;
   line-height: 16.71px;
 }
@@ -35,18 +35,23 @@
 .Select {
   height: 35px;
   border-radius: 5px;
-  padding: 8px 12px 8px 12px;
+  padding: 8px 12px;
   background-color: var(--white);
   line-height: 19.09px;
 }
 
 .Bookmark {
+  width: 93px;
   height: 37px;
   border-radius: 4px;
   padding: 10px 12px;
   background-color: var(--gray-100);
   font-size: 14px;
   line-height: 16.71px;
+}
+
+.Bookmark span {
+  margin-right: 6px;
 }
 
 .Select,
@@ -68,13 +73,9 @@
 }
 
 .ModalDelete {
-  background-color: #ff5b56;
+  background-color: var(--red);
   color: #f5f5f5;
   border: none;
-}
-
-/* 태블릿 */
-@media (max-width: 1199px) {
 }
 
 /* 모바일 */
@@ -91,7 +92,7 @@
 
   .LandingLogin,
   .LinkAdd {
-    padding: 10px 16px 10px 16px;
+    padding: 10px 16px;
   }
 
   .Login {
@@ -100,8 +101,12 @@
 
   .Select {
     height: 29px;
-    padding: 6px 10px 6px 10px;
+    padding: 6px 10px;
     font-size: 14px;
     line-height: 16.71px;
+  }
+
+  .Bookmark span {
+    margin-right: 4px;
   }
 }

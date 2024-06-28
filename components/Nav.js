@@ -34,7 +34,9 @@ function Nav() {
         {isLoggIn ? (
           <div className={styles.userWrapper}>
             <Link href="/favorite">
-              <Button type="Bookmark">⭐즐겨찾기</Button>
+              <Button type="Bookmark">
+                <span>⭐</span>즐겨찾기
+              </Button>
             </Link>
             <div className={styles.userInfo}>
               <Image

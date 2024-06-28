@@ -1,8 +1,12 @@
-/*빈 페이지*/
-.nav {
+.nav,
+.userWrapper,
+.userInfo {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+}
+
+.nav {
+  justify-content: space-between;
   padding: 20px 200px;
   background-color: var(--gray-100);
 }
@@ -13,15 +17,11 @@
 }
 
 .userWrapper {
-  display: flex;
-  align-items: center;
   gap: 24px;
 }
 
 .userInfo {
-  display: flex;
   justify-content: center;
-  align-items: center;
   gap: 6px;
 }
 
@@ -45,5 +45,16 @@
   .logoWrapper {
     width: 88.67px;
     height: 16px;
+  }
+}
+
+/* 모바일 */
+@media (max-width: 390px) {
+  .userInfo span {
+    display: none;
+  }
+
+  .userWrapper {
+    gap: 12px;
   }
 }

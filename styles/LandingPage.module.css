@@ -14,7 +14,6 @@
 }
 
 .header h1 {
-  margin: 0;
   margin-bottom: 40px;
   font-size: 64px;
   line-height: 80px;
@@ -22,9 +21,6 @@
 
 .header span {
   background: linear-gradient(90deg, var(--primary), #ff9f9f);
-  color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
 }
 
 .header img {
@@ -83,6 +79,7 @@
   background: linear-gradient(90deg, #fe578f, #68e8f9);
 }
 
+.header span,
 .contents span {
   color: transparent;
   background-clip: text;
@@ -109,11 +106,6 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-
-.textContainer h2,
-.textContainer p {
-  margin: 0;
 }
 
 /* 태블릿 */
@@ -151,11 +143,13 @@
 @media (max-width: 390px) {
   .header {
     height: 399px;
+    padding-top: 28px;
   }
 
   .header h1 {
     font-size: 32px;
     line-height: 42px;
+    margin-bottom: 24px;
   }
 
   .contents {
