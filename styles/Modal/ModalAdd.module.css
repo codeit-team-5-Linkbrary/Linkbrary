@@ -1,0 +1,46 @@
+.linkName {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  text-align: center;
+  color: var(--gray-400);
+  margin-top: 8px;
+}
+
+.folderList {
+  margin: 29px 0 29px;
+}
+
+.folderItem {
+  display: flex;
+  align-items: center;
+  width: 280px;
+  height: 40px;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.folderItem:hover {
+  background-color: var(--gray-100);
+}
+
+.selected {
+  background-color: var(--gray-100);
+}
+
+.folderName {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: left;
+}
+
+.linkCount {
+  color: var(--gray-400);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16.71px;
+  text-align: left;
+}
