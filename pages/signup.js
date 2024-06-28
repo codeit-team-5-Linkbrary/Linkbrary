@@ -3,11 +3,10 @@ import LinkbraryLogo from "../public/asset/LinkbraryLogo.svg";
 import Logo from "../styles/Logo.module.css";
 import Label from "@/components/Lable";
 import Input from "@/components/Input";
-import Button from "@/components/Button";
 import styles from "../styles/Login.module.css";
 import { useState } from "react";
 import global from "../styles/LoginBox.module.css";
-import loginButton from "../styles/Button.module.css";
+import signupbutton from "../styles/Button.module.css";
 
 const Signup = () => {
   const [values, setValues] = useState({
@@ -82,8 +81,11 @@ const Signup = () => {
             value={values.password}
             onChange={handleChange}
           />
+
+          <button type="submit" className={signupbutton.LoginPagebutton}>
+            회원가입
+          </button>
         </form>
-        <Button type="submit">회원가입</Button>
       </div>
     </>
   );

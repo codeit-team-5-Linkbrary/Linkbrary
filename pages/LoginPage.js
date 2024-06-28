@@ -6,7 +6,6 @@ import Label from "@/components/Lable";
 import Input from "@/components/Input";
 import { useState } from "react";
 import global from "../styles/LoginBox.module.css";
-import loginButton from "../styles/Button.module.css";
 import SocialLogin from "@/components/Sociallogin";
 import loginbutton from "../styles/Button.module.css";
 
@@ -55,6 +54,7 @@ const LoginPage = () => {
             value={values.email}
             onChange={handleChange}
           ></Input>
+
           <Label className={styles.Label} htmlFor="password">
             비밀번호
           </Label>
@@ -67,13 +67,14 @@ const LoginPage = () => {
             value={values.password}
             onChange={handleChange}
           />
+
+          <button type="submit" className={loginbutton.LoginPagebutton}>
+            로그인
+          </button>
+          <div className={styles.sociallogin}>
+            <SocialLogin />
+          </div>
         </form>
-        <button type="submit" className={loginbutton.button}>
-          로그인
-        </button>
-        <div className={styles.sociallogin}>
-          <SocialLogin />
-        </div>
       </div>
     </>
   );
