@@ -1,3 +1,3 @@
-export default function LoginApi(request, response) {
-  response.send("회원가입 api");
+export default function handeler(req, res) {
+  res.send(req.query);
 }

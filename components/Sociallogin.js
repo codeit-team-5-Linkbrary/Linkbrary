@@ -1,17 +1,12 @@
 import styles from "../styles/Sociallogin.module.css";
 import googleLogo from "../public/asset/google-logo.png";
 import kakaoLogo from "../public/asset/kakao-logo.png";
-
-const SocialLoginLinkProps = {
-  name: "string",
-  url: "string",
-  logoSrc: "string",
-};
+import Image from "next/image";
 
 const SocialLoginLink = ({ name, url, logoSrc }) => {
   return (
     <a href={url} target="_blank" rel="noopener noreferrer" aria-label={name}>
-      <img src={logoSrc} alt={name} width="42" />
+      <Image src={logoSrc} alt={name} width="42" />
     </a>
   );
 };

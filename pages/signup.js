@@ -11,10 +11,9 @@ import loginButton from "../styles/Button.module.css";
 
 const Signup = () => {
   const [values, setValues] = useState({
-    name: "",
     email: "",
     password: "",
-    passwordRepeqt: "",
+    name: "",
   });
 
   function handleChange(e) {
@@ -25,12 +24,6 @@ const Signup = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
-    if (values.password !== values.passwordRepeqt) {
-      console.log("warn", "비밀번호가 일치하지 않습니다.");
-      return;
-    }
-    const { name, email, apssword } = values;
   }
 
   return (
@@ -44,8 +37,8 @@ const Signup = () => {
           </div>
           <div className={Logo.Signup}>
             <p className={Logo.SignupLine}>
-              이미회원이신가요?
-              <Link className={Logo.Signuplink} href="/signup">
+              이미 회원이신가요?
+              <Link className={Logo.Signuplink} href="/LoginPage">
                 로그인하기
               </Link>
             </p>
@@ -90,7 +83,7 @@ const Signup = () => {
             onChange={handleChange}
           />
         </form>
-        <Button>회원가입</Button>
+        <Button type="submit">회원가입</Button>
       </div>
     </>
   );

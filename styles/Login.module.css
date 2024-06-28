@@ -1,8 +1,12 @@
 .Label,
-.Input,
 .Button {
   display: block;
   width: 100%;
+}
+
+.Input {
+  display: block;
+  width: 400px;
 }
 
 .Label {
@@ -42,4 +46,10 @@
   padding: 5px;
   border: 1px solid CCD5E3;
   border-radius: 15px;
+}
+
+.sociallogin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
