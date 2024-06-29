@@ -1,6 +1,8 @@
 .global {
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
   justify-content: center;
-  align-items: center;
-  min-height: 100dvh;
+  min-height: 100vh;
+  background-color: #f0f6ff;
 }

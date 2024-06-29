@@ -6,6 +6,9 @@ import Label from "@/components/Lable";
 import Input from "@/components/Input";
 import { useState } from "react";
 import global from "../styles/LoginBox.module.css";
+import loginButton from "../styles/Button.module.css";
+import SocialLogin from "@/components/Sociallogin";
+import loginbutton from "../styles/Button.module.css";
 
 const LoginPage = () => {
   const [values, setValues] = useState({ email: "", password: "" });
@@ -23,14 +26,19 @@ const LoginPage = () => {
   return (
     <>
       <div className={global.global}>
-        <div className={Logo.AuthContainer}>
+        <div>
           <div className={Logo.Login}>
             <Link href="/">
               <LinkbraryLogo />
             </Link>
           </div>
           <div className={Logo.Signup}>
-            회원이 아니신가요?<Link href="/signup">회원 가입하기</Link>
+            <p className={Logo.SignupLine}>
+              회원이 아니신가요?
+              <Link className={Logo.Signuplink} href="/signup">
+                회원 가입하기
+              </Link>
+            </p>
           </div>
         </div>
 
@@ -60,6 +68,12 @@ const LoginPage = () => {
             onChange={handleChange}
           />
         </form>
+        <button type="submit" className={loginbutton.button}>
+          로그인
+        </button>
+        <div className={styles.sociallogin}>
+          <SocialLogin />
+        </div>
       </div>
     </>
   );

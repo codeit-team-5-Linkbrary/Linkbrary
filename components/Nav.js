@@ -15,7 +15,7 @@ function Nav() {
   const router = useRouter();
 
   const handleLinkClick = () => {
-    router.push("/login");
+    router.push("/LoginPage");
   };
 
   return (
