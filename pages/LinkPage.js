@@ -1,61 +1,70 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import LinkCard from "@/components/LinkCard";
+import Modal from "@/components/Modal";
+import {
+  fetchLinks,
+  createLink,
+  toggleFavorite,
+  getLinksByFolderId,
+  updateLink,
+  deleteLink,
+  getFavorites,
+} from "@/lib/api_link";
+import {
+  getFolders,
+  createFolder,
+  renameFolder, // 수정된 부분
+  deleteFolder,
+} from "@/lib/api_folder";
 import styles from "@/styles/LinkPage.module.css";
 import AddIcon from "@/public/asset/link/Add.png";
 import ShareIcon from "@/public/asset/link/Share.png";
 import EditIcon from "@/public/asset/link/Pen.png";
 import DeleteIcon from "@/public/asset/link/Delete.png";
 import SearchIcon from "@/public/asset/link/Search.png";
-import Modal from "@/components/Modal";
-import {
-  fetchLinks,
-  addLink,
-  toggleFavorite,
-  createLink,
-  getAllLinks,
-  updateLink,
-  deleteLink,
-  getFavorites,
-  getLinksByFolderId,
-} from "@/lib/api_link";
 
 const LinkPage = () => {
   const [links, setLinks] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeButton, setActiveButton] = useState("전체");
-  const [folders, setFolders] = useState([
-    "전체",
-    "유튜브",
-    "코딩 팁",
-    "채용 사이트",
-    "유용한 글",
-    "나만의 장소",
-  ]);
+  const [folders, setFolders] = useState([{ id: "all", name: "전체" }]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
+  const [selectedFolderId, setSelectedFolderId] = useState(null);
+  const [inputValue, setInputValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
-
   const token =
     typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
 
   useEffect(() => {
-    const getLinks = async () => {
+    const getInitialData = async () => {
       try {
-        const data = await fetchLinks(token);
-        setLinks(data);
+        const folderData = await getFolders(token);
+        setFolders((prevFolders) => [...prevFolders, ...folderData]);
+        const linkData = await fetchLinks(token);
+        setLinks(linkData);
       } catch (error) {
-        console.error("Error fetching links:", error);
+        console.error("Error fetching initial data:", error);
       }
     };
-    getLinks();
+    getInitialData();
   }, [token]);
 
-  const handleAddLink = async (newLink) => {
+  const handleAddFolder = async (folderName) => {
     try {
-      const data = await createLink(token, newLink.url, newLink.folderId);
-      setLinks([...links, data]);
+      const data = await createFolder(token, folderName);
+      setFolders((prevFolders) => [...prevFolders, data]);
+    } catch (error) {
+      console.error("Error adding folder:", error);
+    }
+  };
+
+  const handleAddLink = async (url, folderId) => {
+    try {
+      const data = await createLink(token, url, folderId);
+      setLinks((prevLinks) => [...prevLinks, data]);
     } catch (error) {
       console.error("Error adding link:", error);
     }
@@ -76,8 +85,13 @@ const LinkPage = () => {
       link.description.includes(searchQuery)
   );
 
-  const handleButtonClick = (buttonName) => {
-    setActiveButton(buttonName);
+  const handleButtonClick = (folderId) => {
+    setActiveButton(folderId);
+    if (folderId !== "all") {
+      getLinksByFolderId(token, folderId).then((data) => setLinks(data));
+    } else {
+      fetchLinks(token).then((data) => setLinks(data));
+    }
   };
 
   const handleToggleFavorite = async (id) => {
@@ -87,8 +101,8 @@ const LinkPage = () => {
         id,
         links.find((link) => link.id === id).isFavorite
       );
-      setLinks(
-        links.map((link) =>
+      setLinks((prevLinks) =>
+        prevLinks.map((link) =>
           link.id === id ? { ...link, isFavorite: updatedLink.favorite } : link
         )
       );
@@ -97,19 +111,39 @@ const LinkPage = () => {
     }
   };
 
-  const handleAddFolder = () => {
-    setIsModalOpen(true);
-    setModalContent("add-folder");
-  };
-
   const handleModalClose = () => {
     setIsModalOpen(false);
     setModalContent(null);
+    setSelectedFolderId(null);
   };
 
-  const handleOptionAction = (action) => {
+  const handleOptionAction = (action, folderId = null) => {
     setIsModalOpen(true);
     setModalContent(action);
+    setSelectedFolderId(folderId);
+  };
+
+  const handleFolderAction = async (action, folderId, newName = "") => {
+    try {
+      if (action === "add") {
+        await handleAddFolder(newName);
+      } else if (action === "edit") {
+        await renameFolder(token, folderId, newName);
+        setFolders((prevFolders) =>
+          prevFolders.map((folder) =>
+            folder.id === folderId ? { ...folder, name: newName } : folder
+          )
+        );
+      } else if (action === "delete") {
+        await deleteFolder(token, folderId);
+        setFolders((prevFolders) =>
+          prevFolders.filter((folder) => folder.id !== folderId)
+        );
+      }
+      handleModalClose();
+    } catch (error) {
+      console.error(`Error performing ${action} on folder:`, error);
+    }
   };
 
   const handlePageChange = (page) => {
@@ -143,56 +177,84 @@ const LinkPage = () => {
       <div className={styles.content}>
         <div className={styles.sortingContainer}>
           <div className={styles.sortingOptions}>
-            {folders.map((buttonName) => (
+            {folders.map((folder) => (
               <button
-                key={buttonName}
+                key={folder.id}
                 className={`${styles.sortingButton} ${
-                  activeButton === buttonName ? styles.sortingButtonActive : ""
+                  activeButton === folder.id ? styles.sortingButtonActive : ""
                 }`}
-                onClick={() => handleButtonClick(buttonName)}
+                onClick={() => handleButtonClick(folder.id)}
               >
-                {buttonName}
+                {folder.name}
               </button>
             ))}
           </div>
-          <button className={styles.folderButton} onClick={handleAddFolder}>
+          <button
+            className={styles.folderButton}
+            onClick={() => handleOptionAction("add-folder")}
+          >
             폴더 추가
-            <Image src={AddIcon} alt="add Icon" className={styles.searchIcon} />
+            <Image src={AddIcon} alt="add Icon" className={styles.addIcon} />
           </button>
         </div>
         <div className={styles.optionBar}>
-          <span className={styles.optionTitle}>유용한 글</span>
-          <div className={styles.optionActions}>
-            <div
-              className={styles.optionAction}
-              onClick={() => handleOptionAction("share")}
-            >
-              <Image
-                src={ShareIcon}
-                alt="Share"
-                className={styles.optionIcon}
-              />{" "}
-              공유
+          <span className={styles.optionTitle}>
+            {activeButton === "all"
+              ? "전체"
+              : folders.find((folder) => folder.id === activeButton)?.name}
+          </span>
+          {activeButton !== "all" && (
+            <div className={styles.optionActions}>
+              <div
+                className={styles.optionAction}
+                onClick={() =>
+                  handleOptionAction(
+                    "share",
+                    folders.find((folder) => folder.id === activeButton)?.id
+                  )
+                }
+              >
+                <Image
+                  src={ShareIcon}
+                  alt="Share"
+                  className={styles.optionIcon}
+                />{" "}
+                공유
+              </div>
+              <div
+                className={styles.optionAction}
+                onClick={() =>
+                  handleOptionAction(
+                    "edit",
+                    folders.find((folder) => folder.id === activeButton)?.id
+                  )
+                }
+              >
+                <Image
+                  src={EditIcon}
+                  alt="Edit"
+                  className={styles.optionIcon}
+                />{" "}
+                이름 변경
+              </div>
+              <div
+                className={styles.optionAction}
+                onClick={() =>
+                  handleOptionAction(
+                    "delete",
+                    folders.find((folder) => folder.id === activeButton)?.id
+                  )
+                }
+              >
+                <Image
+                  src={DeleteIcon}
+                  alt="Delete"
+                  className={styles.optionIcon}
+                />{" "}
+                삭제
+              </div>
             </div>
-            <div
-              className={styles.optionAction}
-              onClick={() => handleOptionAction("edit")}
-            >
-              <Image src={EditIcon} alt="Edit" className={styles.optionIcon} />{" "}
-              이름 변경
-            </div>
-            <div
-              className={styles.optionAction}
-              onClick={() => handleOptionAction("delete")}
-            >
-              <Image
-                src={DeleteIcon}
-                alt="Delete"
-                className={styles.optionIcon}
-              />{" "}
-              삭제
-            </div>
-          </div>
+          )}
         </div>
         <div className={styles.cardList}>
           {filteredLinks.map((link) => (
@@ -232,7 +294,12 @@ const LinkPage = () => {
         </div>
       </div>
       {isModalOpen && (
-        <Modal content={modalContent} onClose={handleModalClose} />
+        <Modal
+          content={modalContent}
+          onClose={handleModalClose}
+          onAction={handleFolderAction}
+          folderId={selectedFolderId}
+        />
       )}
     </div>
   );

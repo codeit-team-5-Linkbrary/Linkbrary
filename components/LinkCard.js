@@ -1,229 +1,101 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import axios from "axios";
-import LinkCard from "@/components/LinkCard";
-import styles from "@/styles/LinkPage.module.css";
-import AddIcon from "@/public/asset/link/Add.png";
-import ShareIcon from "@/public/asset/link/Share.png";
-import EditIcon from "@/public/asset/link/Pen.png";
-import DeleteIcon from "@/public/asset/link/Delete.png";
-import SearchIcon from "@/public/asset/link/Search.png";
-import Modal from "@/components/Modal";
+import styles from "@/styles/LinkCard.module.css";
+import kebab from "@/public/asset/link/kebab.png";
+import Star_default from "@/public/asset/link/Star_default.png";
+import Star_selected from "@/public/asset/link/Star_selected.png";
+import defaultImage from "@/public/asset/link/No_image.png";
 
-const LinkPage = () => {
-  const [links, setLinks] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeButton, setActiveButton] = useState("전체");
-  const [folders, setFolders] = useState([
-    "전체",
-    "유튜브",
-    "코딩 팁",
-    "채용 사이트",
-    "유용한 글",
-    "나만의 장소",
-  ]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState(null);
+const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
+  const { title, description, imageSource, createdAt, isFavorite } = link;
+  const [isStar, setIsStar] = useState(isFavorite);
+  const [isSettingMenu, setIsSettingMenu] = useState(false);
 
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
+  const onStarClick = () => {
+    setIsStar(!isStar);
+    onToggleFavorite();
+  };
 
-  const fetchLinks = async () => {
-    try {
-      const response = await axios.get(
-        "https://linkbrary-api.vercel.app/6-5/links",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setLinks(response.data);
-    } catch (error) {
-      console.error("Error fetching links:", error);
+  const toggleSettingMenu = () => {
+    setIsSettingMenu((prevState) => !prevState);
+  };
+
+  const userUpDateAt = (date) => {
+    const currentDate = new Date();
+    const itemDate = new Date(date);
+    const timeDiff = currentDate.getTime() - itemDate.getTime();
+    const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    if (hours > 0 && hours < 24) {
+      return `${hours} hours ago`;
+    } else if (hours >= 24) {
+      const day = Math.floor(hours / 24);
+      return `${day} days ago`;
+    } else {
+      return `${minutes} minutes ago`;
     }
-  };
-
-  useEffect(() => {
-    fetchLinks();
-  }, []);
-
-  const handleAddLink = async (newLink) => {
-    try {
-      const response = await axios.post(
-        "https://linkbrary-api.vercel.app/6-5/links",
-        newLink,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setLinks([...links, response.data]);
-    } catch (error) {
-      console.error("Error adding link:", error);
-    }
-  };
-
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
-  const handleSearchButtonClick = () => {
-    console.log("검색 실행:", searchQuery);
-  };
-
-  const filteredLinks = links.filter(
-    (link) =>
-      link.url.includes(searchQuery) ||
-      link.title.includes(searchQuery) ||
-      link.description.includes(searchQuery)
-  );
-
-  const handleButtonClick = (buttonName) => {
-    setActiveButton(buttonName);
-  };
-
-  const handleToggleFavorite = async (id) => {
-    try {
-      const response = await axios.put(
-        `https://linkbrary-api.vercel.app/6-5/links/${id}`,
-        { favorite: !links.find((link) => link.id === id).isFavorite },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setLinks(
-        links.map((link) =>
-          link.id === id ? { ...link, isFavorite: !link.isFavorite } : link
-        )
-      );
-    } catch (error) {
-      console.error("Error toggling favorite:", error);
-    }
-  };
-
-  const handleAddFolder = () => {
-    setIsModalOpen(true);
-    setModalContent("add-folder");
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    setModalContent(null);
-  };
-
-  const handleOptionAction = (action) => {
-    setIsModalOpen(true);
-    setModalContent(action);
   };
 
   return (
-    <div className={styles.linkPage}>
-      <div className={styles.searchBar}>
-        <div className={styles.searchContainer}>
+    <li className={styles.card}>
+      <div className={styles.cardImageWrap}>
+        {imageSource ? (
           <Image
-            src={SearchIcon}
-            alt="Search Icon"
-            className={styles.searchIcon}
+            className={styles.cardImage}
+            src={imageSource}
+            alt={title}
+            layout="fill"
           />
-          <input
-            type="text"
-            className={styles.searchInput}
-            placeholder="링크를 검색해 보세요."
-            value={searchQuery}
-            onChange={handleSearch}
+        ) : (
+          <div className={styles.noImage}>
+            <Image src={defaultImage} alt="Default" layout="fill" />
+          </div>
+        )}
+        <div className={styles.cardStarWrap} onClick={onStarClick}>
+          <Image
+            src={isStar ? Star_selected : Star_default}
+            alt="Favorite"
+            width={34}
+            height={34}
           />
         </div>
-        <Image
-          src={AddIcon}
-          alt="Add Icon"
-          className={styles.addIcon}
-          onClick={handleAddLink}
-        />
       </div>
-      <div className={styles.content}>
-        <div className={styles.sortingContainer}>
-          <div className={styles.sortingOptions}>
-            {folders.map((buttonName) => (
-              <button
-                key={buttonName}
-                className={`${styles.sortingButton} ${
-                  activeButton === buttonName ? styles.sortingButtonActive : ""
-                }`}
-                onClick={() => handleButtonClick(buttonName)}
-              >
-                {buttonName}
-              </button>
-            ))}
-          </div>
-          <button className={styles.folderButton} onClick={handleAddFolder}>
-            폴더 추가
-            <Image src={AddIcon} alt="add Icon" className={styles.addIcon} />
+      <div className={styles.cardMenuList}>
+        <div className={styles.cardMenuTop}>
+          <p className={styles.cardUpdateAt}>{userUpDateAt(createdAt)}</p>
+          <button
+            className={styles.cardSettingButton}
+            onClick={toggleSettingMenu}
+          >
+            <Image src={kebab} alt="Menu" width={21} height={17} />
+            {isSettingMenu && (
+              <ul className={styles.cardSettingList}>
+                <li className={styles.cardSettingMenu} onClick={onDelete}>
+                  삭제하기
+                </li>
+                <li className={styles.cardSettingMenu} onClick={onEdit}>
+                  수정하기
+                </li>
+              </ul>
+            )}
           </button>
         </div>
-        <div className={styles.optionBar}>
-          <span className={styles.optionTitle}>유용한 글</span>
-          <div className={styles.optionActions}>
-            <div
-              className={styles.optionAction}
-              onClick={() => handleOptionAction("share")}
-            >
-              <Image
-                src={ShareIcon}
-                alt="Share"
-                className={styles.optionIcon}
-              />{" "}
-              공유
-            </div>
-            <div
-              className={styles.optionAction}
-              onClick={() => handleOptionAction("edit")}
-            >
-              <Image src={EditIcon} alt="Edit" className={styles.optionIcon} />{" "}
-              이름 변경
-            </div>
-            <div
-              className={styles.optionAction}
-              onClick={() => handleOptionAction("delete")}
-            >
-              <Image
-                src={DeleteIcon}
-                alt="Delete"
-                className={styles.optionIcon}
-              />{" "}
-              삭제
-            </div>
-          </div>
-        </div>
-        <div className={styles.cardList}>
-          {filteredLinks.map((link) => (
-            <LinkCard
-              key={link.id}
-              link={link}
-              onToggleFavorite={() => handleToggleFavorite(link.id)}
-            />
-          ))}
-        </div>
-        <div className={styles.pagination}>
-          <button className={styles.paginationButton}>&lt;</button>
-          {Array.from({ length: 5 }, (_, idx) => (
-            <button key={idx} className={styles.paginationNumber}>
-              {idx + 1}
-            </button>
-          ))}
-          <span className={styles.paginationDots}>...</span>
-          <button className={styles.paginationNumber}>9</button>
-          <button className={styles.paginationButton}>&gt;</button>
-        </div>
+        <h2 className={styles.cardTitle}>{title}</h2>
+        <p className={styles.cardDescription}>{description}</p>
+        <p className={styles.cardCreatedAt}>
+          <span className={styles.cardFullYear}>
+            {new Date(createdAt).getFullYear()}.{" "}
+          </span>
+          <span className={styles.cardMonth}>
+            {new Date(createdAt).getMonth() + 1}.{" "}
+          </span>
+          <span className={styles.cardDay}>
+            {new Date(createdAt).getDate()}
+          </span>
+        </p>
       </div>
-      {isModalOpen && (
-        <Modal content={modalContent} onClose={handleModalClose} />
-      )}
-    </div>
+    </li>
   );
 };
 
-export default LinkPage;
+export default LinkCard;
