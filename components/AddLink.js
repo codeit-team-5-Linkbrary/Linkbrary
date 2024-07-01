@@ -40,7 +40,7 @@ export default function AddLink() {
           value={link}
           onChange={(e) => setLink(e.target.value)}
         />
-        <Button type="Add" onClick={handleAddLink}>
+        <Button variant="Add" onClick={handleAddLink}>
           추가하기
         </Button>
       </div>

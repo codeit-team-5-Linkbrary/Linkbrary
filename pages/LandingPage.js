@@ -14,9 +14,9 @@ function LandingPage() {
 
   const handleLinkAddClick = () => {
     if (isLoggIn) {
-      router.push("/links");
+      router.push("/LinkPage");
     } else {
-      router.push("/login");
+      router.push("/LoginPage");
     }
   };
 
@@ -30,7 +30,7 @@ function LandingPage() {
               <span>세상의 모든 정보</span>를<br />
               쉽게 저장하고 관리해 보세요
             </h1>
-            <Button type="LinkAdd" onClick={handleLinkAddClick}>
+            <Button variant="LinkAdd" onClick={handleLinkAddClick}>
               링크 추가하기
             </Button>
           </div>
