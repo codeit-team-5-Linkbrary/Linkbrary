@@ -3,11 +3,21 @@ import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
 import styles from "@/styles/LandingPage.module.css";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 function LandingPage() {
-  //테스트 코드
-  const handleClick = () => {
-    console.log(1);
+  /* ui 작성을 위해 임의로 작성한 코드
+   true, false 바꾸면 /links로 이동할지 /login 으로 이동할지 달라짐*/
+  const isLoggIn = false;
+
+  const router = useRouter();
+
+  const handleLinkAddClick = () => {
+    if (isLoggIn) {
+      router.push("/LinkPage");
+    } else {
+      router.push("/LoginPage");
+    }
   };
 
   return (
@@ -20,7 +30,7 @@ function LandingPage() {
               <span>세상의 모든 정보</span>를<br />
               쉽게 저장하고 관리해 보세요
             </h1>
-            <Button type="LinkAdd" onClick={handleClick}>
+            <Button variant="LinkAdd" onClick={handleLinkAddClick}>
               링크 추가하기
             </Button>
           </div>
@@ -28,9 +38,9 @@ function LandingPage() {
       </div>
       <div className={styles.contents}>
         <div className={styles.saveContent}>
-          <div>
+          <div className={styles.textContainer}>
             <h2>
-              <span>원하는 링크</span>를<br />
+              <span>원하는 링크</span>를 <br />
               저장하세요
             </h2>
             <p>
@@ -38,15 +48,19 @@ function LandingPage() {
               사고 싶은 옷, 기억하고 싶은 모든 것을 <br /> 한 공간에 저장하세요.
             </p>
           </div>
-          <Image
-            src="/asset/SaveContent.png"
-            alt={"저장이미지"}
-            width={550}
-            height={450}
-          />
+          <div className={styles.imageContainer}>
+            <div className={styles.images}>
+              <Image
+                src="/asset/SaveContent.png"
+                alt={"저장이미지"}
+                fill
+                style={{ objectFit: "cover" }}
+              />
+            </div>
+          </div>
         </div>
         <div className={styles.managementContent}>
-          <div>
+          <div className={styles.textContainer}>
             <h2>
               링크를 폴더로 <br />
               <span>관리</span> 하세요
@@ -56,19 +70,22 @@ function LandingPage() {
               다양하게 활용할 수 있습니다.
             </p>
           </div>
-          <Image
-            src="/asset/Management.png"
-            alt={"관리이미지"}
-            width={550}
-            height={450}
-            className={styles.leftImages}
-          />
+          <div className={styles.imageContainer}>
+            <div className={styles.images}>
+              <Image
+                src="/asset/Management.png"
+                alt={"관리이미지"}
+                fill
+                style={{ objectFit: "cover" }}
+              />
+            </div>
+          </div>
         </div>
         <div className={styles.shareContent}>
-          <div>
+          <div className={styles.textContainer}>
             <h2>
               저장한 링크를 <br />
-              <span>공유</span>해 보세요.
+              <span>공유</span>해 보세요
             </h2>
             <p>
               여러 링크를 폴더에 담고 공유할 수 있습니다. <br />
@@ -76,30 +93,37 @@ function LandingPage() {
               공유해 보세요.
             </p>
           </div>
-          <Image
-            src="/asset/ShareContent.png"
-            alt={"공유이미지"}
-            width={550}
-            height={450}
-          />
+          <div className={styles.imageContainer}>
+            <div className={styles.images}>
+              <Image
+                src="/asset/ShareContent.png"
+                alt={"공유이미지"}
+                fill
+                style={{ objectFit: "cover" }}
+              />
+            </div>
+          </div>
         </div>
         <div className={styles.searchContent}>
-          <div>
+          <div className={styles.textContainer}>
             <h2>
-              저장한 링크를 <span>검색</span> <br />해 보세요
+              저장한 링크를 <br />
+              <span>검색</span>해 보세요
             </h2>
             <p>중요한 정보들을 검색으로 쉽게 찾아보세요.</p>
           </div>
-          <Image
-            src="/asset/SearchContent.png"
-            alt={"검색이미지"}
-            width={550}
-            height={450}
-            className={styles.leftImages}
-          />
+          <div className={styles.imageContainer}>
+            <div className={styles.images}>
+              <Image
+                src="/asset/SearchContent.png"
+                alt={"검색이미지"}
+                fill
+                style={{ objectFit: "cover" }}
+              />
+            </div>
+          </div>
         </div>
       </div>
-
       <Footer />
     </div>
   );

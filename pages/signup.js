@@ -210,6 +210,9 @@ const Signup = () => {
             회원가입
           </button>
           <Indicator isLodaing={isSubmitting} />
+          <Button variant="login" type="submit">
+            회원가입
+          </Button>
         </form>
       </div>
     </>

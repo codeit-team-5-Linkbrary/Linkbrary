@@ -1,10 +1,10 @@
 import styles from "../styles/Button.module.css";
 
-function Button({ children, type, onClick }) {
-  const buttonClassName = `${styles.button} ${styles[type] || ""}`;
+function Button({ children, type, onClick, variant }) {
+  const buttonClassName = `${styles.button} ${styles[variant] || ""}`;
 
   return (
-    <button className={buttonClassName} onClick={onClick}>
+    <button type={type} className={buttonClassName} onClick={onClick}>
       {children}
     </button>
   );

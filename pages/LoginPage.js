@@ -9,6 +9,7 @@ import global from "../styles/LoginBox.module.css";
 import SocialLogin from "@/components/Sociallogin";
 import loginbutton from "../styles/Button.module.css";
 import axios from "axios";
+import Button from "@/components/Button";
 
 const LoginPage = () => {
   const [values, setValues] = useState({ email: "", password: "" });
@@ -100,6 +101,14 @@ const LoginPage = () => {
             <SocialLogin />
           </div>
         </form>
+          <Button variant="login" type="submit">
+            로그인
+          </Button>
+        </form>
+
+        <div className={styles.sociallogin}>
+          <SocialLogin />
+        </div>
       </div>
     </>
   );
