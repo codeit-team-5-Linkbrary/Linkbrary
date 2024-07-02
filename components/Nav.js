@@ -34,7 +34,7 @@ function Nav() {
         {isLoggIn ? (
           <div className={styles.userWrapper}>
             <Link href="/favorite">
-              <Button type="Bookmark">
+              <Button variant="Bookmark">
                 <span>⭐</span>즐겨찾기
               </Button>
             </Link>
@@ -49,7 +49,7 @@ function Nav() {
             </div>
           </div>
         ) : (
-          <Button type="LandingLogin" onClick={handleLinkClick}>
+          <Button variant="LandingLogin" onClick={handleLinkClick}>
             로그인
           </Button>
         )}

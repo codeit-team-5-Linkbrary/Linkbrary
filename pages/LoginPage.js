@@ -2,13 +2,12 @@ import Link from "next/link";
 import LinkbraryLogo from "../public/asset/LinkbraryLogo.svg";
 import Logo from "../styles/Logo.module.css";
 import styles from "../styles/Login.module.css";
-import Label from "@/components/Lable";
+import Label from "@/components/Label";
 import Input from "@/components/Input";
 import { useState } from "react";
 import global from "../styles/LoginBox.module.css";
-import loginButton from "../styles/Button.module.css";
 import SocialLogin from "@/components/Sociallogin";
-import loginbutton from "../styles/Button.module.css";
+import Button from "@/components/Button";
 
 const LoginPage = () => {
   const [values, setValues] = useState({ email: "", password: "" });
@@ -67,10 +66,11 @@ const LoginPage = () => {
             value={values.password}
             onChange={handleChange}
           />
+          <Button variant="login" type="submit">
+            로그인
+          </Button>
         </form>
-        <button type="submit" className={loginbutton.button}>
-          로그인
-        </button>
+
         <div className={styles.sociallogin}>
           <SocialLogin />
         </div>
