@@ -38,13 +38,14 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
 
   return (
     <li className={styles.card}>
-      <div className={styles.cardImageWrap}>
+      <div className={styles.cardImage}>
         {imageSource ? (
           <Image
-            className={styles.cardImage}
             src={imageSource}
             alt={title}
-            layout="fill"
+            layout="responsive"
+            width={400} // 원하는 너비로 지정
+            height={200} // 원하는 높이로 지정
           />
         ) : (
           <div className={styles.noImage}>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import LinkCard from "@/components/LinkCard";
 import Modal from "@/components/Modal";
+import AddLink from "@/components/AddLink";
 import {
   fetchLinks,
   createLink,
@@ -14,7 +15,7 @@ import {
 import {
   getFolders,
   createFolder,
-  renameFolder, // 수정된 부분
+  renameFolder,
   deleteFolder,
 } from "@/lib/api_folder";
 import styles from "@/styles/LinkPage.module.css";
@@ -27,26 +28,32 @@ import SearchIcon from "@/public/asset/link/Search.png";
 const LinkPage = () => {
   const [links, setLinks] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeButton, setActiveButton] = useState("전체");
-  const [folders, setFolders] = useState([{ id: "all", name: "전체" }]);
+  const [activeButton, setActiveButton] = useState("all");
+  const [folders, setFolders] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [selectedFolderId, setSelectedFolderId] = useState(null);
+  const [inputLink, setInputLink] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [isLoading, setIsLoading] = useState(false);
   const token =
     typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
 
   useEffect(() => {
     const getInitialData = async () => {
+      setIsLoading(true);
       try {
         const folderData = await getFolders(token);
-        setFolders((prevFolders) => [...prevFolders, ...folderData]);
+        setFolders(folderData?.reverse());
+        // setFolders((prevFolders) => [...prevFolders, ...folderData]);
         const linkData = await fetchLinks(token);
         setLinks(linkData);
       } catch (error) {
         console.error("Error fetching initial data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     getInitialData();
@@ -61,11 +68,13 @@ const LinkPage = () => {
     }
   };
 
-  const handleAddLink = async (url, folderId) => {
+  const handleAddLink = async () => {
     try {
-      const data = await createLink(token, url, folderId);
+      const data = await createLink(token, inputLink, activeButton);
+      console.log("data", data);
       setLinks((prevLinks) => [...prevLinks, data]);
     } catch (error) {
+      alert(error.status);
       console.error("Error adding link:", error);
     }
   };
@@ -84,13 +93,27 @@ const LinkPage = () => {
       link.title.includes(searchQuery) ||
       link.description.includes(searchQuery)
   );
-
-  const handleButtonClick = (folderId) => {
+  // 경고문 나중에 삭제
+  const handleButtonClick = async (folderId) => {
     setActiveButton(folderId);
     if (folderId !== "all") {
-      getLinksByFolderId(token, folderId).then((data) => setLinks(data));
+      try {
+        const data = await getLinksByFolderId(token, folderId);
+        setLinks(data);
+      } catch (error) {
+        console.error("Error fetching links by folder:", error);
+        alert("폴더에 속한 링크들을 불러오는 중 오류가 발생했습니다.");
+      }
     } else {
-      fetchLinks(token).then((data) => setLinks(data));
+      try {
+        const folderData = await getFolders(token);
+        setFolders(folderData.reverse());
+        const linkData = await fetchLinks(token);
+        setLinks(linkData);
+      } catch (error) {
+        console.error("Error fetching folders or links:", error);
+        alert("전체 폴더 또는 링크를 불러오는 중 오류가 발생했습니다.");
+      }
     }
   };
 
@@ -108,6 +131,7 @@ const LinkPage = () => {
       );
     } catch (error) {
       console.error("Error toggling favorite:", error);
+      alert("즐겨찾기 상태 변경 중 오류가 발생했습니다.");
     }
   };
 
@@ -135,7 +159,22 @@ const LinkPage = () => {
           )
         );
       } else if (action === "delete") {
-        await deleteFolder(token, folderId);
+        const linksToDelete = links.filter(
+          (link) => link.folderId === folderId
+        );
+        const linkDeletePromises = linksToDelete.map((link) =>
+          deleteLink(token, link.id).catch((error) => {
+            console.error(`Error deleting link ${link.id}:`, error);
+            throw error; // 링크 삭제 에러 처리
+          })
+        );
+        await Promise.all(linkDeletePromises);
+
+        await deleteFolder(token, folderId).catch((error) => {
+          console.error(`Error deleting folder ${folderId}:`, error);
+          throw error; // 폴더 삭제 에러 처리
+        });
+
         setFolders((prevFolders) =>
           prevFolders.filter((folder) => folder.id !== folderId)
         );
@@ -143,16 +182,27 @@ const LinkPage = () => {
       handleModalClose();
     } catch (error) {
       console.error(`Error performing ${action} on folder:`, error);
+      alert(
+        `폴더 ${action === "delete" ? "삭제" : "수정"} 중 오류가 발생했습니다.`
+      );
     }
   };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    // fetch data for the selected page
   };
 
   return (
     <div className={styles.linkPage}>
+      {/* 임시 */}
+      <div>
+        <AddLink
+          inputLink={inputLink}
+          setInputLink={setInputLink}
+          handleAddLink={handleAddLink}
+        />
+      </div>
+
       <div className={styles.searchBar}>
         <div className={styles.searchContainer}>
           <button
@@ -177,6 +227,17 @@ const LinkPage = () => {
       <div className={styles.content}>
         <div className={styles.sortingContainer}>
           <div className={styles.sortingOptions}>
+            {/* 전체 */}
+            <button
+              className={`${styles.sortingButton} ${
+                activeButton === "all" ? styles.sortingButtonActive : ""
+              }`}
+              onClick={() => handleButtonClick("all")}
+            >
+              전체
+            </button>
+
+            {/* folders */}
             {folders.map((folder) => (
               <button
                 key={folder.id}
@@ -197,13 +258,11 @@ const LinkPage = () => {
             <Image src={AddIcon} alt="add Icon" className={styles.addIcon} />
           </button>
         </div>
-        <div className={styles.optionBar}>
-          <span className={styles.optionTitle}>
-            {activeButton === "all"
-              ? "전체"
-              : folders.find((folder) => folder.id === activeButton)?.name}
-          </span>
-          {activeButton !== "all" && (
+        {activeButton !== "all" && (
+          <div className={styles.optionBar}>
+            <span className={styles.optionTitle}>
+              {folders.find((folder) => folder.id === activeButton)?.name}
+            </span>
             <div className={styles.optionActions}>
               <div
                 className={styles.optionAction}
@@ -254,8 +313,8 @@ const LinkPage = () => {
                 삭제
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
         <div className={styles.cardList}>
           {filteredLinks.map((link) => (
             <LinkCard
