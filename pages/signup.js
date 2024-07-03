@@ -6,8 +6,8 @@ import Input from "@/components/Input";
 import styles from "../styles/Login.module.css";
 import { useCallback, useState } from "react";
 import global from "../styles/LoginBox.module.css";
-import signupbutton from "../styles/Button.module.css";
 import axios from "axios";
+import Button from "@/components/Button";
 
 const validateEmail = () => {
   const email = "string";
@@ -201,18 +201,10 @@ const Signup = () => {
             onChange={handlenameInputChange}
           />
           {errors.name && <p className="error-message">{errors.name}</p>}
-
-          <button
-            type="submit"
-            className={signupbutton.LoginPagebutton}
-            disabled={isSubmitting}
-          >
-            회원가입
-          </button>
-          <Indicator isLodaing={isSubmitting} />
-          <Button variant="login" type="submit">
+          <Button variant="Signup" type="submit" disabled={isSubmitting}>
             회원가입
           </Button>
+          <Indicator isLodaing={isSubmitting} />
         </form>
       </div>
     </>
