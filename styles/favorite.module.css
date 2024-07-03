@@ -1,0 +1,12 @@
+.favorite {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 47.73px;
+  text-align: center;
+}
+
+.favoritePage {
+  height: 128px;
+  opacity: 0px;
+  background: var(--gray-100);
+}

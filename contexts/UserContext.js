@@ -38,12 +38,17 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
+  const logout = useCallback(() => {
+    localStorage.removeItem("accessToken");
+    setUser(null);
+  }, []);
+
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
 
   return (
-    <UserContext.Provider value={{ user, isLoading, fetchUser }}>
+    <UserContext.Provider value={{ user, isLoading, fetchUser, logout }}>
       {children}
     </UserContext.Provider>
   );

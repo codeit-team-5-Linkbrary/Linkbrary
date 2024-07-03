@@ -26,6 +26,8 @@ import DeleteIcon from "@/public/asset/link/Delete.png";
 import SearchIcon from "@/public/asset/link/Search.png";
 import Nav from "@/components/Nav";
 import UserContext from "@/contexts/UserContext";
+import Footer from "@/components/Footer";
+import Pagination from "@/components/Pagination";
 
 const LinkPage = () => {
   const [links, setLinks] = useState([]);
@@ -326,33 +328,11 @@ const LinkPage = () => {
               />
             ))}
           </div>
-          <div className={styles.pagination}>
-            <button
-              className={styles.paginationButton}
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, idx) => (
-              <button
-                key={idx}
-                className={`${styles.paginationNumber} ${
-                  currentPage === idx + 1 ? styles.active : ""
-                }`}
-                onClick={() => handlePageChange(idx + 1)}
-              >
-                {idx + 1}
-              </button>
-            ))}
-            <button
-              className={styles.paginationButton}
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
+          <Pagination // Use the new Pagination component here
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
         {isModalOpen && (
           <Modal
@@ -363,6 +343,7 @@ const LinkPage = () => {
           />
         )}
       </div>
+      <Footer />
     </div>
   );
 };
