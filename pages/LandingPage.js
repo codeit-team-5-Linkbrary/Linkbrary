@@ -1,24 +1,34 @@
+import { useEffect, useState } from "react";
 import Button from "@/components/Button";
 import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
 import styles from "@/styles/LandingPage.module.css";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useUser } from "@/contexts/UserContext";
 
 function LandingPage() {
-  /* ui 작성을 위해 임의로 작성한 코드
-   true, false 바꾸면 /links로 이동할지 /login 으로 이동할지 달라짐*/
-  const isLoggIn = false;
-
   const router = useRouter();
+  const { user, isLoading } = useUser();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setIsLoggedIn(!!user);
+    }
+  }, [user, isLoading]);
 
   const handleLinkAddClick = () => {
-    if (isLoggIn) {
+    if (isLoggedIn) {
       router.push("/LinkPage");
     } else {
       router.push("/LoginPage");
     }
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -31,7 +41,7 @@ function LandingPage() {
               쉽게 저장하고 관리해 보세요
             </h1>
             <Button variant="LinkAdd" onClick={handleLinkAddClick}>
-              링크 추가하기
+              {isLoggedIn ? "링크 추가하기" : "시작하기"}
             </Button>
           </div>
         </div>

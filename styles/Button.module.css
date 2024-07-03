@@ -79,8 +79,16 @@
   border-radius: 4px;
   padding: 10px 12px;
   background-color: var(--gray-100);
+  background-image: none;
+  color: #000000;
+  font-weight: 400;
   font-size: 14px;
   line-height: 16.71px;
+}
+
+.Bookmark:hover {
+  background-color: var(--gray-200);
+  border: 1px solid var(--primary);
 }
 
 .Bookmark span {
@@ -88,7 +96,6 @@
 }
 
 .Select,
-.Bookmark,
 .ModalDelete {
   background-image: none;
   border: 1px solid var(--primary);

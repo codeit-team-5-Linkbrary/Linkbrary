@@ -8,39 +8,49 @@ import { useState } from "react";
 import global from "../styles/LoginBox.module.css";
 import SocialLogin from "@/components/Sociallogin";
 import loginbutton from "../styles/Button.module.css";
-import axios from "axios";
+import axios from "@/lib/axios";
+import { useRouter } from "next/router";
+import { useUser } from "@/contexts/UserContext";
 import Button from "@/components/Button";
 
 const LoginPage = () => {
   const [values, setValues] = useState({ email: "", password: "" });
+  const [error, setError] = useState(null);
+  const router = useRouter();
+  const { fetchUser } = useUser();
 
-  const Login = () => {
-    axios
-      .post("https://linkbrary-api.vercel.app/6-5/auth/sign-in", {
-        email: email,
-        password: password,
-      })
-      .then((response) => {
-        // 성공적으로 보내졌을 때(Handle success)
-        console.log("Well done!");
-        console.log("User profile", response.data.user);
-        console.log("User token", response.data.jwt);
-      })
-      .catch((error) => {
-        // 성공적으로 보내지지 않았을 때(Handle error)
-        console.log("An error occurred", error.response);
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post("/auth/sign-in", {
+        email: values.email,
+        password: values.password,
       });
+
+      const { accessToken } = response.data;
+
+      if (!accessToken) {
+        throw new Error("Token not received from server");
+      }
+      localStorage.setItem("accessToken", accessToken);
+      await fetchUser(); // 사용자 정보를 업데이트합니다
+      // fetchUser가 완료된 후 라우팅을 수행합니다
+      router.push("/LinkPage");
+    } catch (error) {
+      if (error.response) {
+      }
+      setError("로그인에 실패했습니다. 이메일과 비밀번호를 확인해 주세요.");
+    }
   };
 
-  function handleChange(e) {
+  const handleChange = (e) => {
     const { name, value } = e.target;
+    setValues((prevValues) => ({ ...prevValues, [name]: value }));
+  };
 
-    setValues((preValues) => ({ ...preValues, [name]: value }));
-  }
-
-  async function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
-  }
+    handleLogin();
+  };
 
   return (
     <>
@@ -61,7 +71,7 @@ const LoginPage = () => {
           </div>
         </div>
 
-        <form className={styles.Form} onChange={handleSubmit}>
+        <form className={styles.Form} onSubmit={handleSubmit}>
           <Label className={styles.Label} htmlFor="email">
             이메일
           </Label>
@@ -73,8 +83,7 @@ const LoginPage = () => {
             placeholder="이메일"
             value={values.email}
             onChange={handleChange}
-          ></Input>
-
+          />
           <Label className={styles.Label} htmlFor="password">
             비밀번호
           </Label>
@@ -87,28 +96,13 @@ const LoginPage = () => {
             value={values.password}
             onChange={handleChange}
           />
-
-          <button
-            type="submit"
-            className={loginbutton.LoginPagebutton}
-            onClick={() => {
-              Login();
-            }}
-          >
+          <Button type="submit" className={loginbutton.LoginPagebutton}>
             로그인
-          </button>
+          </Button>
           <div className={styles.sociallogin}>
             <SocialLogin />
           </div>
         </form>
-          <Button variant="login" type="submit">
-            로그인
-          </Button>
-        </form>
-
-        <div className={styles.sociallogin}>
-          <SocialLogin />
-        </div>
       </div>
     </>
   );

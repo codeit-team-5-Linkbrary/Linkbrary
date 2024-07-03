@@ -1,18 +1,24 @@
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "@/styles/Nav.module.css";
-import { useRouter } from "next/router";
 import Button from "./Button";
 import Image from "next/image";
+import { useUser } from "@/contexts/UserContext";
+import { useRouter } from "next/router";
 
 function Nav() {
-  /* ui 작성을 위해 임의로 작성한 코드
-   true, false 바꾸면 nav ui 달라짐*/
-  const isLoggIn = false;
-  const user = {
-    name: "홍길동",
-  };
-
   const router = useRouter();
+  const { user, fetchUser } = useUser();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      setIsLoading(true);
+      await fetchUser();
+      setIsLoading(false);
+    };
+    checkUser();
+  }, [fetchUser]);
 
   const handleLinkClick = () => {
     router.push("/LoginPage");
@@ -31,7 +37,9 @@ function Nav() {
         </Link>
       </div>
       <div className={styles.userSection}>
-        {isLoggIn ? (
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : user ? (
           <div className={styles.userWrapper}>
             <Link href="/favorite">
               <Button variant="Bookmark">
@@ -41,11 +49,11 @@ function Nav() {
             <div className={styles.userInfo}>
               <Image
                 src="/asset/profileImg.svg"
-                alt="유저이미지"
+                alt="프로필 이미지"
                 width={28}
                 height={28}
               />
-              <span>{user?.name}</span>
+              <span>{user.name}</span>
             </div>
           </div>
         ) : (
