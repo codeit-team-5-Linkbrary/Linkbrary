@@ -34,8 +34,14 @@
   width: 350px;
 }
 
+.NotFound {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
 .LinkAdd,
-.Add {
+.Add,
+.NotFound {
   transition-duration: 0.3s;
 }
 
@@ -44,6 +50,10 @@
   margin-left: 5px;
   margin-top: 5px;
   box-shadow: none;
+}
+
+.NotFound:active {
+  margin: 35px 0 25px 5px;
 }
 
 .Add {

@@ -16,7 +16,7 @@ function NotFound() {
         <h2>Not Found</h2>
         <p>페이지를 찾을 수 없습니다.</p>
       </div>
-      <Button type="" onClick={handleHomeClick}>
+      <Button variant="NotFound" onClick={handleHomeClick}>
         {`<`}- 홈으로 이동하기
       </Button>
       <div className={styles.shadow}></div>
