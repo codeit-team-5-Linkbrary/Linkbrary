@@ -200,6 +200,7 @@
 @media (max-width: 769px) {
   .linkPage {
     gap: 20px;
+    padding: 0 32.5px 0 32.5px;
   }
 
   .searchBar {

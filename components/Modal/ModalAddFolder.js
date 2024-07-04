@@ -25,7 +25,7 @@ const ModalAddFolder = ({ onClose, onAdd }) => {
           onChange={(e) => setFolderName(e.target.value)}
           className={styles.input}
         />
-        <Button type="Modal" onClick={handleAddClick}>
+        <Button variant="Modal" onClick={handleAddClick}>
           추가하기
         </Button>
       </Modal>

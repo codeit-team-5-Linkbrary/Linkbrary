@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import LinkCard from "@/components/LinkCard";
-import Modal from "@/components/Modal";
 import AddLink from "@/components/AddLink";
+import ModalAddFolder from "@/components/Modal/ModalAddFolder";
+import ModalDeleteFolder from "@/components/Modal/ModalDeleteFolder";
+import ModalEdit from "@/components/Modal/ModalEdit";
+import ModalShare from "@/components/Modal/ModalShare";
 import {
   fetchLinks,
   createLink,
@@ -98,7 +101,7 @@ const LinkPage = () => {
       link.title.includes(searchQuery) ||
       link.description.includes(searchQuery)
   );
-  // 경고문 나중에 삭제
+
   const handleButtonClick = async (folderId) => {
     setActiveButton(folderId);
     if (folderId !== "all") {
@@ -124,11 +127,8 @@ const LinkPage = () => {
 
   const handleToggleFavorite = async (id) => {
     try {
-      const updatedLink = await toggleFavorite(
-        token,
-        id,
-        links.find((link) => link.id === id).isFavorite
-      );
+      const linkToUpdate = links.find((link) => link.id === id);
+      const updatedLink = await updateLink(token, id, !linkToUpdate.isFavorite);
       setLinks((prevLinks) =>
         prevLinks.map((link) =>
           link.id === id ? { ...link, isFavorite: updatedLink.favorite } : link
@@ -137,6 +137,20 @@ const LinkPage = () => {
     } catch (error) {
       console.error("Error toggling favorite:", error);
       alert("즐겨찾기 상태 변경 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleEditLink = async (id, newData) => {
+    // 링크 편집 기능 구현
+  };
+
+  const handleDeleteLink = async (id) => {
+    try {
+      await deleteLink(token, id);
+      setLinks((prevLinks) => prevLinks.filter((link) => link.id !== id));
+    } catch (error) {
+      console.error("Error deleting link:", error);
+      alert("링크 삭제 중 오류가 발생했습니다.");
     }
   };
 
@@ -195,6 +209,12 @@ const LinkPage = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+
+  const handleShareButtonClick = (folderId) => {
+    setIsModalOpen(true);
+    setModalContent("share");
+    setSelectedFolderId(folderId);
   };
 
   return (
@@ -334,12 +354,38 @@ const LinkPage = () => {
             onPageChange={handlePageChange}
           />
         </div>
-        {isModalOpen && (
-          <Modal
-            content={modalContent}
+        {isModalOpen && modalContent === "add-folder" && (
+          <ModalAddFolder
             onClose={handleModalClose}
-            onAction={handleFolderAction}
-            folderId={selectedFolderId}
+            onAdd={(folderName) => handleFolderAction("add", null, folderName)}
+          />
+        )}
+        {isModalOpen && modalContent === "edit" && (
+          <ModalEdit
+            onClose={handleModalClose}
+            onSave={(newName) =>
+              handleFolderAction("edit", selectedFolderId, newName)
+            }
+            itemName={
+              folders.find((folder) => folder.id === selectedFolderId)?.name
+            }
+          />
+        )}
+        {isModalOpen && modalContent === "delete" && (
+          <ModalDeleteFolder
+            onClose={handleModalClose}
+            onDelete={() => handleFolderAction("delete", selectedFolderId)}
+            folderName={
+              folders.find((folder) => folder.id === selectedFolderId)?.name
+            }
+          />
+        )}
+        {isModalOpen && modalContent === "share" && (
+          <ModalShare
+            onClose={handleModalClose}
+            folderName={
+              folders.find((folder) => folder.id === selectedFolderId)?.name
+            }
           />
         )}
       </div>

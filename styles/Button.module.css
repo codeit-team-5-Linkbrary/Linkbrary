@@ -11,28 +11,30 @@
   white-space: nowrap;
   cursor: pointer;
   color: #f5f5f5;
+  transition-duration: 0.3s;
+}
+
+.button:active {
+  margin-left: 5px;
+  margin-top: 5px;
+  box-shadow: none;
+}
+
+.button:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(108, 106, 254, 0.85),
+    rgba(106, 227, 254, 0.85)
+  );
 }
 
 .LandingLogin {
   width: 128px;
 }
 
-.LoginPagebutton {
-  color: white;
-  width: 440px;
-  border-radius: 8px;
-  gap: 10px;
-  font-weight: 600;
-  border: none;
-  background: linear-gradient(90deg, var(--primary), #6ae3fe);
-  height: 53px;
-  padding: 16px 20px 16px 20px;
-  font-size: 18px;
-  line-height: 21.48px;
-  white-space: nowrap;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
+.Login,
+.Signup {
+  width: 400px;
 }
 
 .LinkAdd {
@@ -44,14 +46,6 @@
   margin-left: 5px;
   margin-top: 5px;
   box-shadow: none;
-}
-
-.LinkAdd:hover {
-  background: linear-gradient(
-    90deg,
-    rgba(108, 106, 254, 0.85),
-    rgba(106, 227, 254, 0.85)
-  );
 }
 
 .Add {
@@ -87,7 +81,7 @@
 }
 
 .Bookmark:hover {
-  background-color: var(--gray-200);
+  background: var(--gray-200);
   border: 1px solid var(--primary);
 }
 
@@ -116,6 +110,10 @@
   background-color: var(--red);
   color: #f5f5f5;
   border: none;
+}
+
+.ModalDelete:hover {
+  background: #e64b46;
 }
 
 /* 모바일 */

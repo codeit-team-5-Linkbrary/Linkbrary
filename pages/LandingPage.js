@@ -41,7 +41,7 @@ function LandingPage() {
               쉽게 저장하고 관리해 보세요
             </h1>
             <Button variant="LinkAdd" onClick={handleLinkAddClick}>
-              {isLoggedIn ? "링크 추가하기" : "시작하기"}
+              링크추가하기
             </Button>
           </div>
         </div>

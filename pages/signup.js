@@ -6,7 +6,6 @@ import Input from "@/components/Input";
 import styles from "../styles/Login.module.css";
 import { useCallback, useState } from "react";
 import global from "../styles/LoginBox.module.css";
-import signupbutton from "../styles/Button.module.css";
 import axios from "axios";
 import Button from "@/components/Button";
 
@@ -203,11 +202,7 @@ const Signup = () => {
           />
           {errors.name && <p className="error-message">{errors.name}</p>}
 
-          <Button
-            type="submit"
-            className={signupbutton.LoginPagebutton}
-            disabled={isSubmitting}
-          >
+          <Button variant="Signup" type="submit" disabled={isSubmitting}>
             회원가입
           </Button>
         </form>
