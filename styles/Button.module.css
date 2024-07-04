@@ -11,13 +11,6 @@
   white-space: nowrap;
   cursor: pointer;
   color: #f5f5f5;
-  transition-duration: 0.3s;
-}
-
-.button:active {
-  margin-left: 5px;
-  margin-top: 5px;
-  box-shadow: none;
 }
 
 .button:hover {
@@ -39,10 +32,15 @@
 
 .LinkAdd {
   width: 350px;
+}
+
+.LinkAdd,
+.Add {
   transition-duration: 0.3s;
 }
 
-.LinkAdd:active {
+.LinkAdd:active,
+.Add:active {
   margin-left: 5px;
   margin-top: 5px;
   box-shadow: none;
