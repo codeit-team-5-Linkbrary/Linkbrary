@@ -1,22 +1,43 @@
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import styles from "@/styles/Nav.module.css";
-import { useRouter } from "next/router";
 import Button from "./Button";
 import Image from "next/image";
+import { useUser } from "@/contexts/UserContext";
+import { useRouter } from "next/router";
 
 function Nav() {
-  /* ui 작성을 위해 임의로 작성한 코드
-   true, false 바꾸면 nav ui 달라짐*/
-  const isLoggIn = false;
-  const user = {
-    name: "홍길동",
-  };
-
   const router = useRouter();
+  const { user, fetchUser, logout, isLoading } = useUser();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleLinkClick = () => {
     router.push("/LoginPage");
   };
+
+  const handleProfileClick = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+  const handleLogoutClick = () => {
+    logout();
+    router.push("/"); // Redirect to homepage or login page after logout
+  };
+
+  // Close the dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   return (
     <div className={styles.nav}>
@@ -31,21 +52,32 @@ function Nav() {
         </Link>
       </div>
       <div className={styles.userSection}>
-        {isLoggIn ? (
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : user ? (
           <div className={styles.userWrapper}>
             <Link href="/favorite">
               <Button variant="Bookmark">
                 <span>⭐</span>즐겨찾기
               </Button>
             </Link>
-            <div className={styles.userInfo}>
+            <div
+              className={styles.userInfo}
+              onClick={handleProfileClick}
+              ref={dropdownRef}
+            >
               <Image
                 src="/asset/profileImg.svg"
-                alt="유저이미지"
+                alt="프로필 이미지"
                 width={28}
                 height={28}
               />
-              <span>{user?.name}</span>
+              <span>{user.name}</span>
+              {showDropdown && (
+                <div className={styles.dropdownMenu}>
+                  <button onClick={handleLogoutClick}>로그아웃</button>
+                </div>
+              )}
             </div>
           </div>
         ) : (
