@@ -201,10 +201,10 @@ const Signup = () => {
             onChange={handlenameInputChange}
           />
           {errors.name && <p className="error-message">{errors.name}</p>}
-
           <Button variant="Signup" type="submit" disabled={isSubmitting}>
             회원가입
           </Button>
+          <Indicator isLodaing={isSubmitting} />
         </form>
       </div>
     </>

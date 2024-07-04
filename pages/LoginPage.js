@@ -10,6 +10,7 @@ import SocialLogin from "@/components/Sociallogin";
 import axios from "@/lib/axios";
 import { useRouter } from "next/router";
 import { useUser } from "@/contexts/UserContext";
+import axios from "axios";
 import Button from "@/components/Button";
 
 const LoginPage = () => {
@@ -95,7 +96,13 @@ const LoginPage = () => {
             value={values.password}
             onChange={handleChange}
           />
-          <Button variant="Login" type="submit">
+          <Button
+            variant="Login"
+            type="submit"
+            onClick={() => {
+              Login();
+            }}
+          >
             로그인
           </Button>
           <div className={styles.sociallogin}>
