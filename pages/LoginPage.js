@@ -7,7 +7,6 @@ import Input from "@/components/Input";
 import { useState } from "react";
 import global from "../styles/LoginBox.module.css";
 import SocialLogin from "@/components/Sociallogin";
-import loginbutton from "../styles/Button.module.css";
 import axios from "axios";
 import Button from "@/components/Button";
 
@@ -88,27 +87,19 @@ const LoginPage = () => {
             onChange={handleChange}
           />
 
-          <button
+          <Button
+            variant="Login"
             type="submit"
-            className={loginbutton.LoginPagebutton}
             onClick={() => {
               Login();
             }}
           >
             로그인
-          </button>
+          </Button>
           <div className={styles.sociallogin}>
             <SocialLogin />
           </div>
         </form>
-          <Button variant="login" type="submit">
-            로그인
-          </Button>
-        </form>
-
-        <div className={styles.sociallogin}>
-          <SocialLogin />
-        </div>
       </div>
     </>
   );
