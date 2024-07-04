@@ -10,7 +10,6 @@ import SocialLogin from "@/components/Sociallogin";
 import axios from "@/lib/axios";
 import { useRouter } from "next/router";
 import { useUser } from "@/contexts/UserContext";
-import axios from "axios";
 import Button from "@/components/Button";
 
 const LoginPage = () => {
