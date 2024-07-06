@@ -56,6 +56,14 @@
   background: transparent;
 }
 
+.searchResultText {
+  font-family: "Pretendard";
+  font-weight: 400;
+  font-size: 16px;
+  color: #666666;
+  margin-bottom: 16px;
+}
+
 .addIcon {
   width: 24px;
   height: 24px;
@@ -188,6 +196,8 @@
 
 .paginationNumber.active {
   color: var(--black);
+  background: var(--primary);
+  color: var(--white);
 }
 
 .paginationDots {

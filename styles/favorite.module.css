@@ -6,7 +6,13 @@
 }
 
 .favoritePage {
-  height: 128px;
-  opacity: 0px;
+  padding: 20px;
   background: var(--gray-100);
+}
+
+.cardList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
