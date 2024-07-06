@@ -7,7 +7,6 @@ import Input from "@/components/Input";
 import { useState } from "react";
 import global from "../styles/LoginBox.module.css";
 import SocialLogin from "@/components/Sociallogin";
-import loginbutton from "../styles/Button.module.css";
 import axios from "@/lib/axios";
 import { useRouter } from "next/router";
 import { useUser } from "@/contexts/UserContext";
@@ -96,7 +95,13 @@ const LoginPage = () => {
             value={values.password}
             onChange={handleChange}
           />
-          <Button type="submit" className={loginbutton.LoginPagebutton}>
+          <Button
+            variant="Login"
+            type="submit"
+            onClick={() => {
+              Login();
+            }}
+          >
             로그인
           </Button>
           <div className={styles.sociallogin}>

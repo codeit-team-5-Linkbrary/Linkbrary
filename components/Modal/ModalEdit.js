@@ -26,7 +26,7 @@ const ModalEdit = ({ onClose, onSave, itemName }) => {
           onChange={handleInputChange}
           className={styles.input}
         />
-        <Button type="Modal" onClick={handleSaveClick}>
+        <Button variant="Modal" onClick={handleSaveClick}>
           변경하기
         </Button>
       </Modal>

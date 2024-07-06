@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Image from "next/image";
 import styles from "@/styles/LinkCard.module.css";
 import kebab from "@/public/asset/link/kebab.png";
 import Star_default from "@/public/asset/link/Star_default.png";
@@ -163,6 +162,7 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
           linkName={title}
         />
       )}
+
     </>
   );
 };

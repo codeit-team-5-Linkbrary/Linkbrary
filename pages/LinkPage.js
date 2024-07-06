@@ -165,6 +165,20 @@ const LinkPage = () => {
     }
   };
 
+  const handleEditLink = async (id, newData) => {
+    // 링크 편집 기능 구현
+  };
+
+  const handleDeleteLink = async (id) => {
+    try {
+      await deleteLink(token, id);
+      setLinks((prevLinks) => prevLinks.filter((link) => link.id !== id));
+    } catch (error) {
+      console.error("Error deleting link:", error);
+      alert("링크 삭제 중 오류가 발생했습니다.");
+    }
+  };
+
   const handleModalClose = () => {
     setIsModalOpen(false);
     setModalContent(null);
@@ -231,6 +245,7 @@ const LinkPage = () => {
 
   // 검색결과 문구 설정
   const searchResultText = searchQuery ? `${searchQuery}으로 검색한 결과입니다.` : "";
+
 
   return (
     <div>

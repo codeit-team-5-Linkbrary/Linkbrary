@@ -62,7 +62,6 @@ const FavoritePage = () => {
       console.error("Error deleting link:", error);
     }
   };
-
   return (
     <div>
       <Nav />
@@ -83,6 +82,11 @@ const FavoritePage = () => {
           </div>
         )}
       </div>
+      <Pagination // Use the new Pagination component here
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
       <Footer />
     </div>
   );

@@ -8,7 +8,7 @@ const ModalDeleteLink = ({ onClose, onDelete, linkName }) => {
   return (
     <Modal title="링크 삭제" onClose={onClose}>
       <div className={styles.linkName}>{linkName}</div>
-      <Button type="ModalDelete" onClick={onDelete}>
+      <Button variant="ModalDelete" onClick={onDelete}>
         삭제하기
       </Button>
     </Modal>

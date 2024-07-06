@@ -8,7 +8,7 @@ const ModalDeleteFolder = ({ onClose, onDelete, folderName }) => {
   return (
     <Modal title="폴더 삭제" onClose={onClose}>
       <div className={styles.folderName}>{folderName}</div>
-      <Button type="ModalDelete" onClick={onDelete}>
+      <Button variant="ModalDelete" onClick={onDelete}>
         삭제하기
       </Button>
     </Modal>
