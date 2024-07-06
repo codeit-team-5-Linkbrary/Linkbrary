@@ -47,6 +47,7 @@ const LinkPage = () => {
   const { user } = useContext(UserContext) || {};
   const token =
     typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
+
   useEffect(() => {
     const getInitialData = async () => {
       setIsLoading(true);
@@ -365,18 +366,26 @@ const LinkPage = () => {
               </div>
             </div>
           )}
-          <div className={styles.cardList}>
-            {filteredLinks.map((link) => (
-              <LinkCard
-                key={link.id}
-                link={link}
-                onToggleFavorite={() => handleToggleFavorite(link.id)}
-              />
-            ))}
-          </div>
-          <Pagination // Use the new Pagination component here
+          {searchResultText && (
+            <div className={styles.searchResultText}>{searchResultText}</div>
+          )}
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <div className={styles.cardList}>
+              {currentLinks.map((link) => (
+                <LinkCard
+                  key={link.id}
+                  link={link}
+                  onToggleFavorite={() => handleToggleFavorite(link.id)}
+                  onDelete={() => handleDeleteLink(link.id)}
+                />
+              ))}
+            </div>
+          )}
+          <Pagination
             currentPage={currentPage}
-            totalPages={totalPages}
+            totalPages={Math.ceil(filteredLinks.length / linksPerPage)}
             onPageChange={handlePageChange}
           />
         </div>
