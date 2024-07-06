@@ -31,7 +31,6 @@ import Nav from "@/components/Nav";
 import UserContext from "@/contexts/UserContext";
 import Footer from "@/components/Footer";
 import Pagination from "@/components/Pagination";
-
 const LinkPage = () => {
   const [links, setLinks] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,21 +40,19 @@ const LinkPage = () => {
   const [modalContent, setModalContent] = useState(null);
   const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [inputLink, setInputLink] = useState("");
-  const [inputValue, setInputValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10);
+  const [linksPerPage] = useState(9);
   const [isLoading, setIsLoading] = useState(false);
+  const [isActionLoading, setIsActionLoading] = useState(false);
   const { user } = useContext(UserContext) || {};
   const token =
     typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
-
   useEffect(() => {
     const getInitialData = async () => {
       setIsLoading(true);
       try {
         const folderData = await getFolders(token);
         setFolders(folderData?.reverse());
-        // setFolders((prevFolders) => [...prevFolders, ...folderData]);
         const linkData = await fetchLinks(token);
         setLinks(linkData);
       } catch (error) {
@@ -64,64 +61,80 @@ const LinkPage = () => {
         setIsLoading(false);
       }
     };
-    getInitialData();
+    if (token) {
+      getInitialData();
+    }
   }, [token]);
-
   const handleAddFolder = async (folderName) => {
+    if (isActionLoading) return;
+    setIsActionLoading(true);
     try {
       const data = await createFolder(token, folderName);
       setFolders((prevFolders) => [...prevFolders, data]);
     } catch (error) {
+      alert("폴더 추가 중 오류가 발생했습니다.");
       console.error("Error adding folder:", error);
+    } finally {
+      setIsActionLoading(false);
     }
   };
-
+  const handleDeleteLink = async (linkId) => {
+    if (isActionLoading) return;
+    setIsActionLoading(true);
+    try {
+      await deleteLink(token, linkId);
+      setLinks((prevLinks) => prevLinks.filter((link) => link.id !== linkId));
+    } catch (error) {
+      alert("링크 삭제 중 오류가 발생했습니다.");
+      console.error("Error deleting link:", error);
+    } finally {
+      setIsActionLoading(false);
+    }
+  };
   const handleAddLink = async () => {
+    if (isActionLoading) return;
+    setIsActionLoading(true);
     try {
       const data = await createLink(token, inputLink, activeButton);
       console.log("data", data);
       setLinks((prevLinks) => [...prevLinks, data]);
+      setInputLink("");
     } catch (error) {
-      alert(error.status);
+      alert("링크 추가 중 오류가 발생했습니다.");
       console.error("Error adding link:", error);
+    } finally {
+      setIsActionLoading(false);
     }
   };
-
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
-
   const handleSearchButtonClick = () => {
     console.log("검색 실행:", searchQuery);
   };
-
   const filteredLinks = links.filter(
     (link) =>
       link.url.includes(searchQuery) ||
       link.title.includes(searchQuery) ||
       link.description.includes(searchQuery)
   );
-
   const handleButtonClick = async (folderId) => {
     setActiveButton(folderId);
-    if (folderId !== "all") {
-      try {
-        const data = await getLinksByFolderId(token, folderId);
-        setLinks(data);
-      } catch (error) {
-        console.error("Error fetching links by folder:", error);
-        alert("폴더에 속한 링크들을 불러오는 중 오류가 발생했습니다.");
+    setIsLoading(true);
+    try {
+      let data;
+      if (folderId !== "all") {
+        data = await getLinksByFolderId(token, folderId);
+      } else {
+        data = await fetchLinks(token);
       }
-    } else {
-      try {
-        const folderData = await getFolders(token);
-        setFolders(folderData.reverse());
-        const linkData = await fetchLinks(token);
-        setLinks(linkData);
-      } catch (error) {
-        console.error("Error fetching folders or links:", error);
-        alert("전체 폴더 또는 링크를 불러오는 중 오류가 발생했습니다.");
-      }
+      console.log("Fetched links data:", data); // 응답 데이터 확인
+      setLinks(data);
+    } catch (error) {
+      console.error("Error fetching links by folder:", error);
+      alert("폴더에 속한 링크들을 불러오는 중 오류가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -159,16 +172,6 @@ const LinkPage = () => {
 
   const handleEditLink = async (id, newData) => {
     // 링크 편집 기능 구현
-  };
-
-  const handleDeleteLink = async (id) => {
-    try {
-      await deleteLink(token, id);
-      setLinks((prevLinks) => prevLinks.filter((link) => link.id !== id));
-    } catch (error) {
-      console.error("Error deleting link:", error);
-      alert("링크 삭제 중 오류가 발생했습니다.");
-    }
   };
 
   const handleModalClose = () => {
@@ -221,6 +224,8 @@ const LinkPage = () => {
       alert(
         `폴더 ${action === "delete" ? "삭제" : "수정"} 중 오류가 발생했습니다.`
       );
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
@@ -228,11 +233,15 @@ const LinkPage = () => {
     setCurrentPage(page);
   };
 
-  const handleShareButtonClick = (folderId) => {
-    setIsModalOpen(true);
-    setModalContent("share");
-    setSelectedFolderId(folderId);
-  };
+  // 페이지네이션을 위한 링크 슬라이스
+  const indexOfLastLink = currentPage * linksPerPage;
+  const indexOfFirstLink = indexOfLastLink - linksPerPage;
+  const currentLinks = filteredLinks.slice(indexOfFirstLink, indexOfLastLink);
+
+  // 검색결과 문구 설정
+  const searchResultText = searchQuery
+    ? `${searchQuery}으로 검색한 결과입니다.`
+    : "";
 
   return (
     <div>
