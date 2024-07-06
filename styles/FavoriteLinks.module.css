@@ -1,7 +1,8 @@
 .links {
   display: flex;
   flex-wrap: wrap;
-  max-width: 1060px;
+  max-width: 1125px;
+  padding: 0 32.5px;
   width: auto;
   gap: 19px;
   opacity: 0px;

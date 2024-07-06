@@ -113,22 +113,23 @@
 
 .folderButton {
   display: flex;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 19.09px;
-  letter-spacing: -0.30000001192092896px;
-  text-align: center;
   align-items: center;
   color: var(--primary);
   background: var(--white);
   border: none; /* 테두리를 없앱니다 */
   cursor: pointer;
+  gap: 4px;
+}
+.folderButtonText {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 19.09px;
+  text-align: center;
 }
 
 .folderButton img {
   width: 16px;
   height: 16px;
-  margin-left: 4px;
 }
 
 .optionBar {
@@ -284,5 +285,63 @@
     width: 24px;
     height: 24px;
     font-size: 12px;
+  }
+
+  .sortingContainer {
+    position: relative;
+  }
+
+  .folderButton {
+    z-index: 1;
+    position: fixed;
+    left: 35%;
+    top: 65%;
+    width: 127px;
+    height: 35px;
+    padding: 8px 24px;
+    background-color: var(--primary);
+    gap: 4px;
+    border-radius: 20px;
+    border: 1px;
+    opacity: 0px;
+  }
+
+  .folderButtonText {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 19.09px;
+    color: var(--gray-100);
+  }
+
+  .optionBar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .optionTitle {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: -0.20000000298023224px;
+    text-align: left;
+  }
+
+  .optionActions {
+    width: 100%;
+    border-radius: 8px;
+    gap: 12px;
+  }
+
+  .optionAction {
+    align-items: center;
+    font-size: 14px;
+    gap: 4px;
+  }
+
+  .optionIcon {
+    margin-right: 0;
+    width: 18px;
+    height: 18px;
   }
 }
