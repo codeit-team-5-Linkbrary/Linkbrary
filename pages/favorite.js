@@ -1,10 +1,13 @@
+import FavoriteLinks from "@/components/FavoriteLinks";
 import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
 import Pagination from "@/components/Pagination";
-import styels from "@/styles/favorite.module.css";
+import Image from "next/image";
 import { useState } from "react";
+import favorite from "@/public/asset/favorite.png";
+import styles from "@/styles/Favorite.module.css";
 
-export default function favorite() {
+export default function FavoritePage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
 
@@ -12,17 +15,27 @@ export default function favorite() {
     setCurrentPage(page);
   };
 
+  const handleTotalPagesChange = (totalPages) => {
+    setTotalPages(totalPages);
+  };
+
   return (
     <div>
       <Nav />
-      <div className={styels.favoritePage}>
-        <div className={styels.favorite}>⭐️ 즐겨찾기</div>
+      <div className={styles.favoritePage}>
+        <div className={styles.favorite}>
+          <Image src={favorite} alt="즐겨찾기" className={styles.favoriteImg} />
+        </div>
       </div>
-      <Pagination // Use the new Pagination component here
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      <div className={styles.FavoriteLinks}>
+        <FavoriteLinks onTotalPagesChange={handleTotalPagesChange} />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
+
       <Footer />
     </div>
   );

@@ -48,6 +48,7 @@ function Nav() {
             alt="로고이미지"
             width={128}
             height={24}
+            className={styles.logoImage}
           />
         </Link>
       </div>

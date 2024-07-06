@@ -1,21 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/LinkCard.module.css";
 import kebab from "@/public/asset/link/kebab.png";
 import Star_default from "@/public/asset/link/Star_default.png";
 import Star_selected from "@/public/asset/link/Star_selected.png";
 import defaultImage from "@/public/asset/link/No_image.png"; // 기본 이미지
 import ModalDeleteLink from "@/components/Modal/ModalDeleteLink";
-import Image from "next/image"; // next/image 모듈 import
+import Image from "next/image";
 
 const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
-  const { id, title, description, createdAt, isFavorite, imageSource } = link;
-  const [isStar, setIsStar] = useState(isFavorite);
+  const { id, title, description, createdAt, favorite, imageSource } = link;
   const [isSettingMenu, setIsSettingMenu] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [starImage, setStarImage] = useState(
+    favorite ? Star_selected : Star_default
+  );
 
-  const onStarClick = () => {
-    setIsStar(!isStar);
-    onToggleFavorite();
+  useEffect(() => {
+    setStarImage(favorite ? Star_selected : Star_default);
+  }, [favorite]);
+
+  const onStarClick = (e) => {
+    e.stopPropagation();
+    onToggleFavorite(id);
   };
 
   const toggleSettingMenu = () => {
@@ -84,12 +90,7 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
           </div>
         )}
         <div className={styles.cardStarWrap} onClick={onStarClick}>
-          <Image
-            src={isStar ? Star_selected.src : Star_default.src}
-            alt="Favorite"
-            width={34}
-            height={34}
-          />
+          <Image src={starImage} alt="Favorite" width={34} height={34} />
         </div>
       </div>
       <div className={styles.cardMenuList}>
@@ -99,7 +100,7 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
             className={styles.cardSettingButton}
             onClick={toggleSettingMenu}
           >
-            <img src={kebab.src} alt="Menu" width={21} height={17} />
+            <Image src={kebab.src} alt="Menu" width={21} height={17} />
           </button>
           {isSettingMenu && (
             <ul className={styles.cardSettingList}>

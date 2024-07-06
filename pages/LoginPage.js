@@ -95,13 +95,7 @@ const LoginPage = () => {
             value={values.password}
             onChange={handleChange}
           />
-          <Button
-            variant="Login"
-            type="submit"
-            onClick={() => {
-              Login();
-            }}
-          >
+          <Button variant="Login" onClick={() => {}}>
             로그인
           </Button>
           <div className={styles.sociallogin}>

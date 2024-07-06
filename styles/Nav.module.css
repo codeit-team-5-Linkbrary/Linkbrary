@@ -84,6 +84,11 @@
   }
 
   .userWrapper {
-    gap: 12px;
+    gap: 16px;
+  }
+
+  .logoImage {
+    width: 100%;
+    height: 100%;
   }
 }
