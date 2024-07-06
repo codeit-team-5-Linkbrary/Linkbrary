@@ -11,13 +11,6 @@
   white-space: nowrap;
   cursor: pointer;
   color: #f5f5f5;
-  transition-duration: 0.3s;
-}
-
-.button:active {
-  margin-left: 5px;
-  margin-top: 5px;
-  box-shadow: none;
 }
 
 .button:hover {
@@ -39,13 +32,28 @@
 
 .LinkAdd {
   width: 350px;
+}
+
+.NotFound {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.LinkAdd,
+.Add,
+.NotFound {
   transition-duration: 0.3s;
 }
 
-.LinkAdd:active {
+.LinkAdd:active,
+.Add:active {
   margin-left: 5px;
   margin-top: 5px;
   box-shadow: none;
+}
+
+.NotFound:active {
+  margin: 35px 0 25px 5px;
 }
 
 .Add {
