@@ -23,6 +23,7 @@ import {
 } from "@/lib/api_folder";
 import styles from "@/styles/LinkPage.module.css";
 import AddIcon from "@/public/asset/link/Add.png";
+import AddIconSmall from "@/public/asset/link/Add2.png";
 import ShareIcon from "@/public/asset/link/Share.png";
 import EditIcon from "@/public/asset/link/Pen.png";
 import DeleteIcon from "@/public/asset/link/Delete.png";
@@ -45,6 +46,7 @@ const LinkPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const { user } = useContext(UserContext) || {};
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const token =
     typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
 
@@ -66,6 +68,20 @@ const LinkPage = () => {
       getInitialData();
     }
   }, [token]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 390);
+    };
+
+    handleResize(); // 초기 로드 시 실행
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const handleAddFolder = async (folderName) => {
     if (isActionLoading) return;
     setIsActionLoading(true);
@@ -305,8 +321,12 @@ const LinkPage = () => {
               className={styles.folderButton}
               onClick={() => handleOptionAction("add-folder")}
             >
-              폴더 추가
-              <Image src={AddIcon} alt="add Icon" className={styles.addIcon} />
+              <span className={styles.folderButtonText}>폴더 추가</span>
+              <Image
+                src={isSmallScreen ? AddIconSmall : AddIcon}
+                alt="add Icon"
+                className={styles.addIcon}
+              />
             </button>
           </div>
           {activeButton !== "all" && (
