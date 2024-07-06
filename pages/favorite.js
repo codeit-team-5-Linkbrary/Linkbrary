@@ -1,9 +1,9 @@
+import { useState } from "react";
 import FavoriteLinks from "@/components/FavoriteLinks";
 import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
 import Pagination from "@/components/Pagination";
 import Image from "next/image";
-import { useState } from "react";
 import favorite from "@/public/asset/favorite.png";
 import styles from "@/styles/Favorite.module.css";
 
