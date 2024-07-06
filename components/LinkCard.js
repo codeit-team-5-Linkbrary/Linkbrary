@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/LinkCard.module.css";
 import kebab from "@/public/asset/link/kebab.png";
 import Star_default from "@/public/asset/link/Star_default.png";
 import Star_selected from "@/public/asset/link/Star_selected.png";
 import defaultImage from "@/public/asset/link/No_image.png";
 import ModalDeleteLink from "@/components/Modal/ModalDeleteLink";
+import Image from "next/image";
 
 const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
   const {
@@ -17,19 +18,21 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
     image_source,
     url,
   } = link;
-  const [isStar, setIsStar] = useState(isFavorite);
+  
   const [isSettingMenu, setIsSettingMenu] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [starImage, setStarImage] = useState(
+    favorite ? Star_selected : Star_default
+  );
 
-  const onStarClick = async (e) => {
+  useEffect(() => {
+    setStarImage(favorite ? Star_selected : Star_default);
+  }, [favorite]);
+
+
+  const onStarClick = (e) => {
     e.stopPropagation();
-    try {
-      setIsStar(!isStar);
-      await onToggleFavorite();
-    } catch (error) {
-      console.error("Error toggling favorite:", error);
-      setIsStar(isStar);
-    }
+    onToggleFavorite(id);
   };
 
   const toggleSettingMenu = (e) => {
@@ -109,15 +112,10 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
               />
             </div>
           )}
-          <div className={styles.cardStarWrap} onClick={onStarClick}>
-            <Image
-              src={isStar ? Star_selected.src : Star_default.src}
-              alt="Favorite"
-              width={34}
-              height={34}
-            />
-          </div>
+        <div className={styles.cardStarWrap} onClick={onStarClick}>
+          <Image src={starImage} alt="Favorite" width={34} height={34} />
         </div>
+      </div>
         <div className={styles.cardMenuList}>
           <div className={styles.cardMenuTop}>
             <p className={styles.cardUpdateAt}>{userUpDateAt(createdAt)}</p>
@@ -125,7 +123,7 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
               className={styles.cardSettingButton}
               onClick={toggleSettingMenu}
             >
-              <img src={kebab.src} alt="Menu" width={21} height={17} />
+              <Image src={kebab.src} alt="Menu" width={21} height={17} />
             </button>
             {isSettingMenu && (
               <ul className={styles.cardSettingList}>
@@ -138,9 +136,9 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
               </ul>
             )}
           </div>
-          <p className={styles.cardTitle}>{title}</p>
+          <p className={styles.cardTitle}>{truncateDescription(title, 20)}</p>
           <p className={styles.cardDescription}>
-            {truncateDescription(description, 50)}
+            {truncateDescription(description, 20)}
           </p>
           <p className={styles.cardCreatedAt}>
             <span className={styles.cardFullYear}>

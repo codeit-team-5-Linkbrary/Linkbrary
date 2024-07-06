@@ -1,18 +1,20 @@
-.favorite {
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 47.73px;
-  text-align: center;
-}
-
 .favoritePage {
-  padding: 20px;
+  height: 128px;
+  opacity: 0px;
   background: var(--gray-100);
 }
 
-.cardList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
+.favorite {
+  text-align: center;
+}
+
+.favoriteImg {
+  margin-top: 10px;
+}
+
+@media (max-width: 390px) {
+  .favoriteImg {
+    width: 150px;
+    height: 38px;
+  }
 }

@@ -5,9 +5,10 @@
   padding: 0;
   gap: 40px;
   width: 100%;
-  max-width: 1060px;
+  max-width: 1125px;
   margin: 0 auto;
   margin-top: 40px;
+  padding: 0 32.5px 0 32.5px;
 }
 
 .searchBar {
@@ -25,6 +26,7 @@
 .searchContainer {
   display: flex;
   align-items: center;
+  width: 100%;
   gap: 10px;
 }
 
@@ -44,7 +46,6 @@
 
 .searchInput {
   width: 100%;
-  max-width: 600px;
   height: 24px;
   font-family: "Pretendard";
   font-weight: 400;
@@ -111,21 +112,22 @@
 }
 
 .folderButton {
-  padding: 8px 12px;
-  font-family: "Pretendard";
-  font-weight: 400;
+  display: flex;
   font-size: 16px;
-  line-height: 19px;
+  font-weight: 500;
+  line-height: 19.09px;
+  letter-spacing: -0.30000001192092896px;
+  text-align: center;
+  align-items: center;
   color: var(--primary);
   background: var(--white);
   border: none; /* 테두리를 없앱니다 */
-  border-radius: 5px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
 }
 
 .folderButton img {
+  width: 16px;
+  height: 16px;
   margin-left: 4px;
 }
 
@@ -167,6 +169,7 @@
   flex-wrap: wrap;
   gap: 20px;
   width: 100%;
+  min-height: 50px;
 }
 
 .pagination {
@@ -210,32 +213,14 @@
 @media (max-width: 769px) {
   .linkPage {
     gap: 20px;
-    padding: 0 32.5px 0 32.5px;
-  }
-
-  .searchBar {
-    padding: 10px 12px;
-    height: auto;
-    gap: 4px;
-    flex-wrap: wrap;
   }
 
   .searchInput {
     width: 100%;
   }
 
-  .sortingOptions {
-    gap: 4px;
-  }
-
-  .sortingButton {
-    font-size: 14px;
-    padding: 6px 10px;
-  }
-
   .folderButton {
     font-size: 14px;
-    padding: 6px 10px;
     border: none; /* 테두리를 없앱니다 */
   }
 
@@ -273,18 +258,16 @@
   }
 
   .sortingOptions {
-    gap: 2px;
     flex-wrap: wrap;
   }
 
   .sortingButton {
-    font-size: 12px;
-    padding: 4px 8px;
+    font-size: 14px;
+    padding: 6px 10px;
   }
 
   .folderButton {
     font-size: 12px;
-    padding: 4px 8px;
     border: none; /* 테두리를 없앱니다 */
   }
 

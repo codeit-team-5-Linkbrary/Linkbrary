@@ -147,22 +147,33 @@ const LinkPage = () => {
   };
 
   const handleToggleFavorite = async (id) => {
-    if (isActionLoading) return;
-    setIsActionLoading(true);
     try {
       const linkToUpdate = links.find((link) => link.id === id);
-      const updatedLink = await updateLink(token, id, !linkToUpdate.isFavorite);
+      const newFavoriteStatus = !linkToUpdate.favorite;
+
       setLinks((prevLinks) =>
         prevLinks.map((link) =>
-          link.id === id ? { ...link, isFavorite: updatedLink.favorite } : link
+          link.id === id ? { ...link, favorite: newFavoriteStatus } : link
+        )
+      );
+
+      const updatedLink = await updateLink(token, id, newFavoriteStatus);
+
+      // API 응답으로 최종 상태 업데이트 (서버 상태와 동기화)
+      setLinks((prevLinks) =>
+        prevLinks.map((link) =>
+          link.id === id ? { ...link, favorite: updatedLink.favorite } : link
         )
       );
     } catch (error) {
       console.error("Error toggling favorite:", error);
       alert("즐겨찾기 상태 변경 중 오류가 발생했습니다.");
-    } finally {
-      setIsActionLoading(false);
-    }
+      // 에러 발생 시 원래 상태로 되돌리기
+      setLinks((prevLinks) =>
+        prevLinks.map((link) =>
+          link.id === id ? { ...link, favorite: linkToUpdate.favorite } : link
+        )
+      );
   };
 
   const handleEditLink = async (id, newData) => {
