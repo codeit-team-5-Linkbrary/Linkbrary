@@ -41,13 +41,12 @@ const LinkPage = () => {
   const [modalContent, setModalContent] = useState(null);
   const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [inputLink, setInputLink] = useState("");
-  const [inputValue, setInputValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10);
+  const [linksPerPage] = useState(9);
   const [isLoading, setIsLoading] = useState(false);
+  const [isActionLoading, setIsActionLoading] = useState(false);
   const { user } = useContext(UserContext) || {};
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
+  const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
 
   useEffect(() => {
     const getInitialData = async () => {
@@ -55,7 +54,6 @@ const LinkPage = () => {
       try {
         const folderData = await getFolders(token);
         setFolders(folderData?.reverse());
-        // setFolders((prevFolders) => [...prevFolders, ...folderData]);
         const linkData = await fetchLinks(token);
         setLinks(linkData);
       } catch (error) {
@@ -64,26 +62,52 @@ const LinkPage = () => {
         setIsLoading(false);
       }
     };
-    getInitialData();
+    if (token) {
+      getInitialData();
+    }
   }, [token]);
 
   const handleAddFolder = async (folderName) => {
+    if (isActionLoading) return;
+    setIsActionLoading(true);
     try {
       const data = await createFolder(token, folderName);
       setFolders((prevFolders) => [...prevFolders, data]);
     } catch (error) {
+      alert("폴더 추가 중 오류가 발생했습니다.");
       console.error("Error adding folder:", error);
+    } finally {
+      setIsActionLoading(false);
+    }
+  };
+
+  const handleDeleteLink = async (linkId) => {
+    if (isActionLoading) return;
+    setIsActionLoading(true);
+    try {
+      await deleteLink(token, linkId);
+      setLinks((prevLinks) => prevLinks.filter((link) => link.id !== linkId));
+    } catch (error) {
+      alert("링크 삭제 중 오류가 발생했습니다.");
+      console.error("Error deleting link:", error);
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
   const handleAddLink = async () => {
+    if (isActionLoading) return;
+    setIsActionLoading(true);
     try {
       const data = await createLink(token, inputLink, activeButton);
       console.log("data", data);
       setLinks((prevLinks) => [...prevLinks, data]);
+      setInputLink("");
     } catch (error) {
-      alert(error.status);
+      alert("링크 추가 중 오류가 발생했습니다.");
       console.error("Error adding link:", error);
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
@@ -104,28 +128,27 @@ const LinkPage = () => {
 
   const handleButtonClick = async (folderId) => {
     setActiveButton(folderId);
-    if (folderId !== "all") {
-      try {
-        const data = await getLinksByFolderId(token, folderId);
-        setLinks(data);
-      } catch (error) {
-        console.error("Error fetching links by folder:", error);
-        alert("폴더에 속한 링크들을 불러오는 중 오류가 발생했습니다.");
+    setIsLoading(true);
+    try {
+      let data;
+      if (folderId !== "all") {
+        data = await getLinksByFolderId(token, folderId);
+      } else {
+        data = await fetchLinks(token);
       }
-    } else {
-      try {
-        const folderData = await getFolders(token);
-        setFolders(folderData.reverse());
-        const linkData = await fetchLinks(token);
-        setLinks(linkData);
-      } catch (error) {
-        console.error("Error fetching folders or links:", error);
-        alert("전체 폴더 또는 링크를 불러오는 중 오류가 발생했습니다.");
-      }
+      console.log("Fetched links data:", data); // 응답 데이터 확인
+      setLinks(data);
+    } catch (error) {
+      console.error("Error fetching links by folder:", error);
+      alert("폴더에 속한 링크들을 불러오는 중 오류가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleToggleFavorite = async (id) => {
+    if (isActionLoading) return;
+    setIsActionLoading(true);
     try {
       const linkToUpdate = links.find((link) => link.id === id);
       const updatedLink = await updateLink(token, id, !linkToUpdate.isFavorite);
@@ -137,6 +160,8 @@ const LinkPage = () => {
     } catch (error) {
       console.error("Error toggling favorite:", error);
       alert("즐겨찾기 상태 변경 중 오류가 발생했습니다.");
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
@@ -167,6 +192,8 @@ const LinkPage = () => {
   };
 
   const handleFolderAction = async (action, folderId, newName = "") => {
+    if (isActionLoading) return;
+    setIsActionLoading(true);
     try {
       if (action === "add") {
         await handleAddFolder(newName);
@@ -178,20 +205,18 @@ const LinkPage = () => {
           )
         );
       } else if (action === "delete") {
-        const linksToDelete = links.filter(
-          (link) => link.folderId === folderId
-        );
+        const linksToDelete = links.filter((link) => link.folderId === folderId);
         const linkDeletePromises = linksToDelete.map((link) =>
           deleteLink(token, link.id).catch((error) => {
             console.error(`Error deleting link ${link.id}:`, error);
-            throw error; // 링크 삭제 에러 처리
+            throw error;
           })
         );
         await Promise.all(linkDeletePromises);
 
         await deleteFolder(token, folderId).catch((error) => {
           console.error(`Error deleting folder ${folderId}:`, error);
-          throw error; // 폴더 삭제 에러 처리
+          throw error;
         });
 
         setFolders((prevFolders) =>
@@ -204,6 +229,8 @@ const LinkPage = () => {
       alert(
         `폴더 ${action === "delete" ? "삭제" : "수정"} 중 오류가 발생했습니다.`
       );
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
@@ -211,33 +238,24 @@ const LinkPage = () => {
     setCurrentPage(page);
   };
 
-  const handleShareButtonClick = (folderId) => {
-    setIsModalOpen(true);
-    setModalContent("share");
-    setSelectedFolderId(folderId);
-  };
+  // 페이지네이션을 위한 링크 슬라이스
+  const indexOfLastLink = currentPage * linksPerPage;
+  const indexOfFirstLink = indexOfLastLink - linksPerPage;
+  const currentLinks = filteredLinks.slice(indexOfFirstLink, indexOfLastLink);
+
+  // 검색결과 문구 설정
+  const searchResultText = searchQuery ? `${searchQuery}으로 검색한 결과입니다.` : "";
+
 
   return (
     <div>
       <Nav isLoggIn={true} user={user} />
-      <AddLink
-        inputLink={inputLink}
-        setInputLink={setInputLink}
-        handleAddLink={handleAddLink}
-      />
+      <AddLink inputLink={inputLink} setInputLink={setInputLink} handleAddLink={handleAddLink} />
       <div className={styles.linkPage}>
-        {/* 임시 */}
         <div className={styles.searchBar}>
           <div className={styles.searchContainer}>
-            <button
-              className={styles.searchButton}
-              onClick={handleSearchButtonClick}
-            >
-              <Image
-                src={SearchIcon}
-                alt="Search Icon"
-                className={styles.searchIcon}
-              />
+            <button className={styles.searchButton} onClick={handleSearchButtonClick}>
+              <Image src={SearchIcon} alt="Search Icon" className={styles.searchIcon} />
             </button>
             <input
               type="text"
@@ -253,9 +271,7 @@ const LinkPage = () => {
             <div className={styles.sortingOptions}>
               {/* 전체 */}
               <button
-                className={`${styles.sortingButton} ${
-                  activeButton === "all" ? styles.sortingButtonActive : ""
-                }`}
+                className={`${styles.sortingButton} ${activeButton === "all" ? styles.sortingButtonActive : ""}`}
                 onClick={() => handleButtonClick("all")}
               >
                 전체
@@ -265,19 +281,14 @@ const LinkPage = () => {
               {folders.map((folder) => (
                 <button
                   key={folder.id}
-                  className={`${styles.sortingButton} ${
-                    activeButton === folder.id ? styles.sortingButtonActive : ""
-                  }`}
+                  className={`${styles.sortingButton} ${activeButton === folder.id ? styles.sortingButtonActive : ""}`}
                   onClick={() => handleButtonClick(folder.id)}
                 >
                   {folder.name}
                 </button>
               ))}
             </div>
-            <button
-              className={styles.folderButton}
-              onClick={() => handleOptionAction("add-folder")}
-            >
+            <button className={styles.folderButton} onClick={() => handleOptionAction("add-folder")}>
               폴더 추가
               <Image src={AddIcon} alt="add Icon" className={styles.addIcon} />
             </button>
@@ -291,68 +302,46 @@ const LinkPage = () => {
                 <div
                   className={styles.optionAction}
                   onClick={() =>
-                    handleOptionAction(
-                      "share",
-                      folders.find((folder) => folder.id === activeButton)?.id
-                    )
+                    handleOptionAction("share", folders.find((folder) => folder.id === activeButton)?.id)
                   }
                 >
-                  <Image
-                    src={ShareIcon}
-                    alt="Share"
-                    className={styles.optionIcon}
-                  />{" "}
-                  공유
+                  <Image src={ShareIcon} alt="Share" className={styles.optionIcon} /> 공유
                 </div>
                 <div
                   className={styles.optionAction}
                   onClick={() =>
-                    handleOptionAction(
-                      "edit",
-                      folders.find((folder) => folder.id === activeButton)?.id
-                    )
+                    handleOptionAction("edit", folders.find((folder) => folder.id === activeButton)?.id)
                   }
                 >
-                  <Image
-                    src={EditIcon}
-                    alt="Edit"
-                    className={styles.optionIcon}
-                  />{" "}
-                  이름 변경
+                  <Image src={EditIcon} alt="Edit" className={styles.optionIcon} /> 이름 변경
                 </div>
                 <div
                   className={styles.optionAction}
                   onClick={() =>
-                    handleOptionAction(
-                      "delete",
-                      folders.find((folder) => folder.id === activeButton)?.id
-                    )
+                    handleOptionAction("delete", folders.find((folder) => folder.id === activeButton)?.id)
                   }
                 >
-                  <Image
-                    src={DeleteIcon}
-                    alt="Delete"
-                    className={styles.optionIcon}
-                  />{" "}
-                  삭제
+                  <Image src={DeleteIcon} alt="Delete" className={styles.optionIcon} /> 삭제
                 </div>
               </div>
             </div>
           )}
-          <div className={styles.cardList}>
-            {filteredLinks.map((link) => (
-              <LinkCard
-                key={link.id}
-                link={link}
-                onToggleFavorite={() => handleToggleFavorite(link.id)}
-              />
-            ))}
-          </div>
-          <Pagination // Use the new Pagination component here
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          {searchResultText && <div className={styles.searchResultText}>{searchResultText}</div>}
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <div className={styles.cardList}>
+              {currentLinks.map((link) => (
+                <LinkCard
+                  key={link.id}
+                  link={link}
+                  onToggleFavorite={() => handleToggleFavorite(link.id)}
+                  onDelete={() => handleDeleteLink(link.id)}
+                />
+              ))}
+            </div>
+          )}
+          <Pagination currentPage={currentPage} totalPages={Math.ceil(filteredLinks.length / linksPerPage)} onPageChange={handlePageChange} />
         </div>
         {isModalOpen && modalContent === "add-folder" && (
           <ModalAddFolder
@@ -363,30 +352,19 @@ const LinkPage = () => {
         {isModalOpen && modalContent === "edit" && (
           <ModalEdit
             onClose={handleModalClose}
-            onSave={(newName) =>
-              handleFolderAction("edit", selectedFolderId, newName)
-            }
-            itemName={
-              folders.find((folder) => folder.id === selectedFolderId)?.name
-            }
+            onSave={(newName) => handleFolderAction("edit", selectedFolderId, newName)}
+            itemName={folders.find((folder) => folder.id === selectedFolderId)?.name}
           />
         )}
         {isModalOpen && modalContent === "delete" && (
           <ModalDeleteFolder
             onClose={handleModalClose}
             onDelete={() => handleFolderAction("delete", selectedFolderId)}
-            folderName={
-              folders.find((folder) => folder.id === selectedFolderId)?.name
-            }
+            folderName={folders.find((folder) => folder.id === selectedFolderId)?.name}
           />
         )}
         {isModalOpen && modalContent === "share" && (
-          <ModalShare
-            onClose={handleModalClose}
-            folderName={
-              folders.find((folder) => folder.id === selectedFolderId)?.name
-            }
-          />
+          <ModalShare onClose={handleModalClose} folderName={folders.find((folder) => folder.id === selectedFolderId)?.name} />
         )}
       </div>
       <Footer />
