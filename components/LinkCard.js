@@ -1,12 +1,14 @@
 import React, { useState } from "react";
+import Image from "next/image";
 import styles from "@/styles/LinkCard.module.css";
 import kebab from "@/public/asset/link/kebab.png";
 import Star_default from "@/public/asset/link/Star_default.png";
 import Star_selected from "@/public/asset/link/Star_selected.png";
 import defaultImage from "@/public/asset/link/No_image.png";
 import ModalDeleteLink from "@/components/Modal/ModalDeleteLink";
+import ModalMoveLink from "@/components/Modal/ModalMoveLink"; // 변경
 
-const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
+const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite, folders }) => { // 변경
   const {
     id,
     title,
@@ -20,6 +22,7 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
   const [isStar, setIsStar] = useState(isFavorite);
   const [isSettingMenu, setIsSettingMenu] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isMoveModalOpen, setIsMoveModalOpen] = useState(false); // 변경
 
   const onStarClick = async (e) => {
     e.stopPropagation();
@@ -85,6 +88,16 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
     window.open(url, "_blank");
   };
 
+  const handleMoveLink = (e) => { // 변경
+    e.stopPropagation();
+    setIsMoveModalOpen(true);
+  };
+
+  const handleMove = async (newFolderId) => { // 변경
+    await onEdit(link, newFolderId);
+    setIsMoveModalOpen(false);
+  };
+
   return (
     <>
       <li className={styles.card} onClick={handleCardClick}>
@@ -125,22 +138,22 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
               className={styles.cardSettingButton}
               onClick={toggleSettingMenu}
             >
-              <img src={kebab.src} alt="Menu" width={21} height={17} />
+              <Image src={kebab.src} alt="Menu" width={21} height={17} />
             </button>
             {isSettingMenu && (
               <ul className={styles.cardSettingList}>
                 <li className={styles.cardSettingMenu} onClick={handleDelete}>
                   삭제하기
                 </li>
-                <li className={styles.cardSettingMenu} onClick={onEdit}>
+                <li className={styles.cardSettingMenu} onClick={handleMoveLink}>
                   수정하기
                 </li>
               </ul>
             )}
           </div>
-          <p className={styles.cardTitle}>{title}</p>
+          <p className={styles.cardTitle}>{truncateDescription(title, 20)}</p>
           <p className={styles.cardDescription}>
-            {truncateDescription(description, 50)}
+            {truncateDescription(description, 20)}
           </p>
           <p className={styles.cardCreatedAt}>
             <span className={styles.cardFullYear}>
@@ -162,7 +175,14 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
           linkName={title}
         />
       )}
-
+      {isMoveModalOpen && (
+        <ModalMoveLink
+          onClose={() => setIsMoveModalOpen(false)}
+          onMove={handleMove}
+          folders={folders}
+          linkName={title}
+        />
+      )}
     </>
   );
 };
