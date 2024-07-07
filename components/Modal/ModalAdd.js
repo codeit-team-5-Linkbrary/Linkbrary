@@ -38,7 +38,7 @@ const ModalAdd = ({ onClose, onAdd, folders = [] }) => {
           </div>
         ))}
       </div>
-      <Button variant="Modal" onClick={handleAddClick}>
+      <Button variant="ModalDelete" onClick={handleAddClick}>
         추가하기
       </Button>
     </Modal>

@@ -110,5 +110,5 @@ function redirectToHomePage() {
 }
 
 function Indicator({ isLoaging }) {
-  return <div>{isLoaging ? <p>Loding...</p> : <p>Loaded</p>}</div>;
+  return <div>{isLoaging ? <p>Loding...</p> : <p></p>}</div>;
 }

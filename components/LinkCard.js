@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/LinkCard.module.css";
 import kebab from "@/public/asset/link/Kebab.png";
@@ -9,21 +8,29 @@ import defaultImage from "@/public/asset/link/No_image.png"; // 기본 이미지
 import ModalDeleteLink from "@/components/Modal/ModalDeleteLink";
 import ModalMoveLink from "@/components/Modal/ModalMoveLink"; // 변경
 
-const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite, folders }) => { // 변경
+const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite, folders }) => {
+  // 변경
   const {
     id,
     title,
     description,
     createdAt,
-    isFavorite,
+    favorite,
     imageSource,
     image_source,
     url,
   } = link;
-  const [isStar, setIsStar] = useState(isFavorite);
+
   const [isSettingMenu, setIsSettingMenu] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false); // 변경
+  const [starImage, setStarImage] = useState(
+    favorite ? Star_selected : Star_default
+  );
+
+  useEffect(() => {
+    setStarImage(favorite ? Star_selected : Star_default);
+  }, [favorite]);
 
   const onStarClick = (e) => {
     e.stopPropagation();
@@ -70,7 +77,7 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite, folders }) => { //
     }
   };
 
-  // description을 최대 50자로 제한하는 함수
+  // description 글자 제한하는 함수
   const truncateDescription = (text, maxLength) => {
     if (text.length <= maxLength) {
       return text;
@@ -82,12 +89,14 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite, folders }) => { //
     window.open(url, "_blank");
   };
 
-  const handleMoveLink = (e) => { // 변경
+  const handleMoveLink = (e) => {
+    // 변경
     e.stopPropagation();
     setIsMoveModalOpen(true);
   };
 
-  const handleMove = async (newFolderId) => { // 변경
+  const handleMove = async (newFolderId) => {
+    // 변경
     await onEdit(link, newFolderId);
     setIsMoveModalOpen(false);
   };
@@ -172,7 +181,6 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite, folders }) => { //
           linkName={title}
         />
       )}
-
     </>
   );
 };

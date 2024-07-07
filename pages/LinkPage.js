@@ -16,7 +16,7 @@ import {
   updateLink,
   deleteLink,
   getFavorites,
-  searchLinks // 추가
+  searchLinks, // 추가
 } from "@/lib/api_link";
 import {
   getFolders,
@@ -49,10 +49,10 @@ const LinkPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const { user } = useContext(UserContext) || {};
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const token =
     typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
   const router = useRouter();
-
 
   useEffect(() => {
     const getInitialData = async () => {
@@ -283,7 +283,7 @@ const LinkPage = () => {
   const searchResultText = searchQuery
     ? `${searchQuery}으로 검색한 결과입니다.`
     : "";
-  
+
   return (
     <div>
       <Nav isLoggIn={true} user={user} />
@@ -297,12 +297,12 @@ const LinkPage = () => {
         <div className={styles.searchBar}>
           <div className={styles.searchContainer}>
             <form onSubmit={handleSearch}>
-              <input               
-              type="text"
-              className={styles.searchInput}
-              placeholder="링크를 검색해 보세요."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              <input
+                type="text"
+                className={styles.searchInput}
+                placeholder="링크를 검색해 보세요."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </form>
           </div>
@@ -337,9 +337,12 @@ const LinkPage = () => {
               className={styles.folderButton}
               onClick={() => handleOptionAction("add-folder")}
             >
-              폴더 추가
-              <Image src={AddIcon} alt="add Icon" className={styles.addIcon} />
-
+              <span className={styles.folderButtonText}>폴더 추가</span>
+              <Image
+                src={isSmallScreen ? AddIconSmall : AddIcon}
+                alt="add Icon"
+                className={styles.addIcon}
+              />
             </button>
           </div>
           {activeButton !== "all" && (
