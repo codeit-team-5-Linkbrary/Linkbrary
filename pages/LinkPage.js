@@ -187,10 +187,6 @@ const LinkPage = () => {
     }
   };
 
-  const handleEditLink = async (id, newData) => {
-    // 링크 편집 기능 구현
-  };
-
   const handleModalClose = () => {
     setIsModalOpen(false);
     setModalContent(null);
