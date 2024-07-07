@@ -7,7 +7,7 @@ const FavoriteLinks = ({ currentPage, onTotalPagesChange }) => {
   const [favoriteLinks, setFavoriteLinks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const pageSize = 10;
+  const pageSize = 9; // 페이지 당 링크 개수
 
   const fetchFavoriteLinks = async () => {
     setIsLoading(true);

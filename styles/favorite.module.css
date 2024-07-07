@@ -1,6 +1,5 @@
 .favoritePage {
   height: 128px;
-  opacity: 0px;
   background: var(--gray-100);
 }
 
@@ -12,9 +11,17 @@
   margin-top: 10px;
 }
 
+.link {
+  min-height: 500px;
+}
+
 @media (max-width: 390px) {
   .favoriteImg {
     width: 150px;
     height: 38px;
+  }
+
+  .link {
+    min-height: 550px;
   }
 }
