@@ -5,7 +5,7 @@ import Nav from "@/components/Nav";
 import Pagination from "@/components/Pagination";
 import Image from "next/image";
 import favorite from "@/public/asset/favorite.png";
-import styles from "@/styles/Favorite.module.css";
+import styles from "@/styles/favorite.module.css";
 
 export default function FavoritePage() {
   const [currentPage, setCurrentPage] = useState(1);
