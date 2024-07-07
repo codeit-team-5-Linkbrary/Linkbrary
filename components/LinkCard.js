@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/LinkCard.module.css";
-import kebab from "@/public/asset/link/kebab.png";
+import kebab from "@/public/asset/link/Kebab.png";
 import Star_default from "@/public/asset/link/Star_default.png";
 import Star_selected from "@/public/asset/link/Star_selected.png";
 import defaultImage from "@/public/asset/link/No_image.png"; // 기본 이미지
