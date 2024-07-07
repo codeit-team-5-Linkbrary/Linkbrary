@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next-on-netlify",
     "start": "next start",
     "lint": "next lint"
   },
@@ -12,8 +12,10 @@
     "@prisma/client": "^5.16.1",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
+    "find-cache-dir": "^5.0.0",
     "next": "14.2.4",
     "next-auth": "^4.24.7",
+    "next-on-netlify": "^3.0.1",
     "react": "^18",
     "react-dom": "^18",
     "react-router-dom": "^6.23.1"

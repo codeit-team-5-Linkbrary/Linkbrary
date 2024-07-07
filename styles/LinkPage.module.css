@@ -5,9 +5,10 @@
   padding: 0;
   gap: 40px;
   width: 100%;
-  max-width: 1060px;
+  max-width: 1125px;
   margin: 0 auto;
   margin-top: 40px;
+  padding: 0 32.5px 0 32.5px;
 }
 
 .searchBar {
@@ -25,6 +26,7 @@
 .searchContainer {
   display: flex;
   align-items: center;
+  width: 100%;
   gap: 10px;
 }
 
@@ -44,7 +46,6 @@
 
 .searchInput {
   width: 100%;
-  max-width: 600px;
   height: 24px;
   font-family: "Pretendard";
   font-weight: 400;
@@ -111,22 +112,24 @@
 }
 
 .folderButton {
-  padding: 8px 12px;
-  font-family: "Pretendard";
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
+  display: flex;
+  align-items: center;
   color: var(--primary);
   background: var(--white);
   border: none; /* 테두리를 없앱니다 */
-  border-radius: 5px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
+  gap: 4px;
+}
+.folderButtonText {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 19.09px;
+  text-align: center;
 }
 
 .folderButton img {
-  margin-left: 4px;
+  width: 16px;
+  height: 16px;
 }
 
 .optionBar {
@@ -167,6 +170,7 @@
   flex-wrap: wrap;
   gap: 20px;
   width: 100%;
+  min-height: 50px;
 }
 
 .pagination {
@@ -210,32 +214,14 @@
 @media (max-width: 769px) {
   .linkPage {
     gap: 20px;
-    padding: 0 32.5px 0 32.5px;
-  }
-
-  .searchBar {
-    padding: 10px 12px;
-    height: auto;
-    gap: 4px;
-    flex-wrap: wrap;
   }
 
   .searchInput {
     width: 100%;
   }
 
-  .sortingOptions {
-    gap: 4px;
-  }
-
-  .sortingButton {
-    font-size: 14px;
-    padding: 6px 10px;
-  }
-
   .folderButton {
     font-size: 14px;
-    padding: 6px 10px;
     border: none; /* 테두리를 없앱니다 */
   }
 
@@ -273,18 +259,16 @@
   }
 
   .sortingOptions {
-    gap: 2px;
     flex-wrap: wrap;
   }
 
   .sortingButton {
-    font-size: 12px;
-    padding: 4px 8px;
+    font-size: 14px;
+    padding: 6px 10px;
   }
 
   .folderButton {
     font-size: 12px;
-    padding: 4px 8px;
     border: none; /* 테두리를 없앱니다 */
   }
 
@@ -301,5 +285,63 @@
     width: 24px;
     height: 24px;
     font-size: 12px;
+  }
+
+  .sortingContainer {
+    position: relative;
+  }
+
+  .folderButton {
+    z-index: 1;
+    position: fixed;
+    left: 35%;
+    top: 65%;
+    width: 127px;
+    height: 35px;
+    padding: 8px 24px;
+    background-color: var(--primary);
+    gap: 4px;
+    border-radius: 20px;
+    border: 1px;
+    opacity: 0px;
+  }
+
+  .folderButtonText {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 19.09px;
+    color: var(--gray-100);
+  }
+
+  .optionBar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .optionTitle {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: -0.20000000298023224px;
+    text-align: left;
+  }
+
+  .optionActions {
+    width: 100%;
+    border-radius: 8px;
+    gap: 12px;
+  }
+
+  .optionAction {
+    align-items: center;
+    font-size: 14px;
+    gap: 4px;
+  }
+
+  .optionIcon {
+    margin-right: 0;
+    width: 18px;
+    height: 18px;
   }
 }

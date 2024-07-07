@@ -26,6 +26,7 @@ import {
 } from "@/lib/api_folder";
 import styles from "@/styles/LinkPage.module.css";
 import AddIcon from "@/public/asset/link/Add.png";
+import AddIconSmall from "@/public/asset/link/Add2.png";
 import ShareIcon from "@/public/asset/link/Share.png";
 import EditIcon from "@/public/asset/link/Pen.png";
 import DeleteIcon from "@/public/asset/link/Delete.png";
@@ -34,7 +35,6 @@ import Nav from "@/components/Nav";
 import UserContext from "@/contexts/UserContext";
 import Footer from "@/components/Footer";
 import Pagination from "@/components/Pagination";
-
 const LinkPage = () => {
   const [links, setLinks] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -52,6 +52,7 @@ const LinkPage = () => {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
   const router = useRouter();
+
 
   useEffect(() => {
     const getInitialData = async () => {
@@ -72,6 +73,19 @@ const LinkPage = () => {
     }
   }, [token]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 390);
+    };
+
+    handleResize(); // 초기 로드 시 실행
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const handleAddFolder = async (folderName) => {
     if (isActionLoading) return;
     setIsActionLoading(true);
@@ -85,7 +99,6 @@ const LinkPage = () => {
       setIsActionLoading(false);
     }
   };
-
   const handleDeleteLink = async (linkId) => {
     if (isActionLoading) return;
     setIsActionLoading(true);
@@ -99,7 +112,6 @@ const LinkPage = () => {
       setIsActionLoading(false);
     }
   };
-
   const handleAddLink = async () => {
     if (isActionLoading) return;
     setIsActionLoading(true);
@@ -141,18 +153,15 @@ const LinkPage = () => {
       console.error("Error searching links:", error);
     }
   };
-
   const handleSearchButtonClick = () => {
     console.log("검색 실행:", searchQuery);
   };
-
   const filteredLinks = links.filter(
     (link) =>
       link.url.includes(searchQuery) ||
       link.title.includes(searchQuery) ||
       link.description.includes(searchQuery)
   );
-
   const handleButtonClick = async (folderId) => {
     setActiveButton(folderId);
     setCurrentPage(1); // 변경: 폴더 변경 시 첫 페이지로 이동
@@ -175,36 +184,39 @@ const LinkPage = () => {
   };
 
   const handleToggleFavorite = async (id) => {
-    if (isActionLoading) return;
-    setIsActionLoading(true);
     try {
       const linkToUpdate = links.find((link) => link.id === id);
-      const updatedLink = await updateLink(token, id, !linkToUpdate.isFavorite);
+      const newFavoriteStatus = !linkToUpdate.favorite;
+
       setLinks((prevLinks) =>
         prevLinks.map((link) =>
-          link.id === id ? { ...link, isFavorite: updatedLink.favorite } : link
+          link.id === id ? { ...link, favorite: newFavoriteStatus } : link
+        )
+      );
+
+      const updatedLink = await updateLink(token, id, newFavoriteStatus);
+
+      // API 응답으로 최종 상태 업데이트 (서버 상태와 동기화)
+      setLinks((prevLinks) =>
+        prevLinks.map((link) =>
+          link.id === id ? { ...link, favorite: updatedLink.favorite } : link
         )
       );
     } catch (error) {
       console.error("Error toggling favorite:", error);
       alert("즐겨찾기 상태 변경 중 오류가 발생했습니다.");
-    } finally {
-      setIsActionLoading(false);
+
+      // 에러 발생 시 원래 상태로 되돌리기
+      setLinks((prevLinks) =>
+        prevLinks.map((link) =>
+          link.id === id ? { ...link, favorite: linkToUpdate.favorite } : link
+        )
+      );
     }
   };
 
   const handleEditLink = async (id, newData) => {
     // 링크 편집 기능 구현
-  };
-
-  const handleDeleteLink = async (id) => {
-    try {
-      await deleteLink(token, id);
-      setLinks((prevLinks) => prevLinks.filter((link) => link.id !== id));
-    } catch (error) {
-      console.error("Error deleting link:", error);
-      alert("링크 삭제 중 오류가 발생했습니다.");
-    }
   };
 
   const handleModalClose = () => {
@@ -220,8 +232,6 @@ const LinkPage = () => {
   };
 
   const handleFolderAction = async (action, folderId, newName = "") => {
-    if (isActionLoading) return;
-    setIsActionLoading(true);
     try {
       if (action === "add") {
         await handleAddFolder(newName);
@@ -239,14 +249,14 @@ const LinkPage = () => {
         const linkDeletePromises = linksToDelete.map((link) =>
           deleteLink(token, link.id).catch((error) => {
             console.error(`Error deleting link ${link.id}:`, error);
-            throw error;
+            throw error; // 링크 삭제 에러 처리
           })
         );
         await Promise.all(linkDeletePromises);
 
         await deleteFolder(token, folderId).catch((error) => {
           console.error(`Error deleting folder ${folderId}:`, error);
-          throw error;
+          throw error; // 폴더 삭제 에러 처리
         });
 
         setFolders((prevFolders) =>
@@ -277,8 +287,7 @@ const LinkPage = () => {
   const searchResultText = searchQuery
     ? `${searchQuery}으로 검색한 결과입니다.`
     : "";
-
-
+  
   return (
     <div>
       <Nav isLoggIn={true} user={user} />
@@ -288,6 +297,7 @@ const LinkPage = () => {
         handleAddLink={handleAddLink}
       />
       <div className={styles.linkPage}>
+        {/* 임시 */}
         <div className={styles.searchBar}>
           <div className={styles.searchContainer}>
             <form onSubmit={handleSearch}>
@@ -333,6 +343,7 @@ const LinkPage = () => {
             >
               폴더 추가
               <Image src={AddIcon} alt="add Icon" className={styles.addIcon} />
+
             </button>
           </div>
           {activeButton !== "all" && (

@@ -1,10 +1,11 @@
+
 import React, { useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/LinkCard.module.css";
-import kebab from "@/public/asset/link/kebab.png";
+import kebab from "@/public/asset/link/Kebab.png";
 import Star_default from "@/public/asset/link/Star_default.png";
 import Star_selected from "@/public/asset/link/Star_selected.png";
-import defaultImage from "@/public/asset/link/No_image.png";
+import defaultImage from "@/public/asset/link/No_image.png"; // 기본 이미지
 import ModalDeleteLink from "@/components/Modal/ModalDeleteLink";
 import ModalMoveLink from "@/components/Modal/ModalMoveLink"; // 변경
 
@@ -24,15 +25,9 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite, folders }) => { //
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false); // 변경
 
-  const onStarClick = async (e) => {
+  const onStarClick = (e) => {
     e.stopPropagation();
-    try {
-      setIsStar(!isStar);
-      await onToggleFavorite();
-    } catch (error) {
-      console.error("Error toggling favorite:", error);
-      setIsStar(isStar);
-    }
+    onToggleFavorite(id);
   };
 
   const toggleSettingMenu = (e) => {
@@ -62,8 +57,7 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite, folders }) => { //
     }
   };
 
-  const handleDelete = (e) => {
-    e.stopPropagation();
+  const handleDelete = () => {
     setIsDeleteModalOpen(true);
   };
 
@@ -102,9 +96,9 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite, folders }) => { //
     <>
       <li className={styles.card} onClick={handleCardClick}>
         <div className={styles.cardImage}>
-          {imageSource || image_source ? (
+          {imageSource ? (
             <Image
-              src={imageSource || image_source}
+              src={imageSource}
               alt={title}
               width={340}
               height={200}
@@ -123,12 +117,7 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite, folders }) => { //
             </div>
           )}
           <div className={styles.cardStarWrap} onClick={onStarClick}>
-            <Image
-              src={isStar ? Star_selected.src : Star_default.src}
-              alt="Favorite"
-              width={34}
-              height={34}
-            />
+            <Image src={starImage} alt="Favorite" width={34} height={34} />
           </div>
         </div>
         <div className={styles.cardMenuList}>
@@ -183,6 +172,7 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite, folders }) => { //
           linkName={title}
         />
       )}
+
     </>
   );
 };
