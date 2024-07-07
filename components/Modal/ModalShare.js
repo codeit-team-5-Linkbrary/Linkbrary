@@ -98,14 +98,12 @@ const ModalShare = ({ onClose, folderName }) => {
           <div>페이스북</div>
         </div>
         <div className={styles.icon} onClick={copyLinkToClipboard}>
-          <div className={styles.linkCopy}>
-            <Image
-              src="/asset/LoadLink.svg"
-              alt="링크 복사"
-              width={18}
-              height={18}
-            />
-          </div>
+          <Image
+            src="/asset/Modal_link.png"
+            alt="링크 복사"
+            width={42}
+            height={42}
+          />
           <div>링크 복사</div>
         </div>
       </div>

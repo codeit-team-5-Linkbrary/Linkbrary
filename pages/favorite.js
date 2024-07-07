@@ -28,14 +28,18 @@ export default function FavoritePage() {
         </div>
       </div>
       <div className={styles.FavoriteLinks}>
-        <FavoriteLinks onTotalPagesChange={handleTotalPagesChange} />
+        <div className={styles.link}>
+          <FavoriteLinks
+            currentPage={currentPage}
+            onTotalPagesChange={handleTotalPagesChange}
+          />
+        </div>
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={handlePageChange}
         />
       </div>
-
       <Footer />
     </div>
   );
