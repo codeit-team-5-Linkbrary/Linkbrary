@@ -386,7 +386,7 @@ const LinkPage = () => {
             <div className={styles.searchResultText}>{searchResultText}</div>
           )}
           {isLoading ? (
-            <div>Loading...</div>
+            <div className={styles.loading}>Loading...</div>
           ) : (
             <div className={styles.cardList}>
               {currentLinks.map((link) => (

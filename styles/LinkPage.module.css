@@ -211,6 +211,11 @@
   color: var(--gray-400);
 }
 
+.loading {
+  margin-top: 50px;
+  height: 150px;
+}
+
 @media (max-width: 769px) {
   .linkPage {
     gap: 20px;
