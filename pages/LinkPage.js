@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import LinkCard from "@/components/LinkCard";
 import AddLink from "@/components/AddLink";
@@ -6,6 +7,7 @@ import ModalAddFolder from "@/components/Modal/ModalAddFolder";
 import ModalDeleteFolder from "@/components/Modal/ModalDeleteFolder";
 import ModalEdit from "@/components/Modal/ModalEdit";
 import ModalShare from "@/components/Modal/ModalShare";
+import ModalMoveLink from "@/components/Modal/ModalMoveLink"; // 변경
 import {
   fetchLinks,
   createLink,
@@ -14,6 +16,7 @@ import {
   updateLink,
   deleteLink,
   getFavorites,
+  searchLinks // 추가
 } from "@/lib/api_link";
 import {
   getFolders,
@@ -46,9 +49,10 @@ const LinkPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const { user } = useContext(UserContext) || {};
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const token =
     typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
+  const router = useRouter();
+
 
   useEffect(() => {
     const getInitialData = async () => {
@@ -123,8 +127,31 @@ const LinkPage = () => {
       setIsActionLoading(false);
     }
   };
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
+
+  const handleEditLink = async (link, newFolderId) => {
+    if (isActionLoading) return;
+    setIsActionLoading(true);
+    try {
+      await deleteLink(token, link.id);
+      await createLink(token, link.url, newFolderId);
+      const updatedLinks = await fetchLinks(token);
+      setLinks(updatedLinks);
+    } catch (error) {
+      alert("링크 이동 중 오류가 발생했습니다.");
+      console.error("Error moving link:", error);
+    } finally {
+      setIsActionLoading(false);
+    }
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await searchLinks(token, searchQuery); // 수정
+      setLinks(data);
+    } catch (error) {
+      console.error("Error searching links:", error);
+    }
   };
   const handleSearchButtonClick = () => {
     console.log("검색 실행:", searchQuery);
@@ -137,6 +164,7 @@ const LinkPage = () => {
   );
   const handleButtonClick = async (folderId) => {
     setActiveButton(folderId);
+    setCurrentPage(1); // 변경: 폴더 변경 시 첫 페이지로 이동
     setIsLoading(true);
     try {
       let data;
@@ -255,7 +283,7 @@ const LinkPage = () => {
   const searchResultText = searchQuery
     ? `${searchQuery}으로 검색한 결과입니다.`
     : "";
-
+  
   return (
     <div>
       <Nav isLoggIn={true} user={user} />
@@ -268,23 +296,15 @@ const LinkPage = () => {
         {/* 임시 */}
         <div className={styles.searchBar}>
           <div className={styles.searchContainer}>
-            <button
-              className={styles.searchButton}
-              onClick={handleSearchButtonClick}
-            >
-              <Image
-                src={SearchIcon}
-                alt="Search Icon"
-                className={styles.searchIcon}
-              />
-            </button>
-            <input
+            <form onSubmit={handleSearch}>
+              <input               
               type="text"
               className={styles.searchInput}
               placeholder="링크를 검색해 보세요."
               value={searchQuery}
-              onChange={handleSearch}
-            />
+              onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </form>
           </div>
         </div>
         <div className={styles.content}>
@@ -317,12 +337,9 @@ const LinkPage = () => {
               className={styles.folderButton}
               onClick={() => handleOptionAction("add-folder")}
             >
-              <span className={styles.folderButtonText}>폴더 추가</span>
-              <Image
-                src={isSmallScreen ? AddIconSmall : AddIcon}
-                alt="add Icon"
-                className={styles.addIcon}
-              />
+              폴더 추가
+              <Image src={AddIcon} alt="add Icon" className={styles.addIcon} />
+
             </button>
           </div>
           {activeButton !== "all" && (
@@ -389,14 +406,20 @@ const LinkPage = () => {
             <div>Loading...</div>
           ) : (
             <div className={styles.cardList}>
-              {currentLinks.map((link) => (
-                <LinkCard
-                  key={link.id}
-                  link={link}
-                  onToggleFavorite={() => handleToggleFavorite(link.id)}
-                  onDelete={() => handleDeleteLink(link.id)}
-                />
-              ))}
+              {currentLinks.length > 0 ? (
+                currentLinks.map((link) => (
+                  <LinkCard
+                    key={link.id}
+                    link={link}
+                    onToggleFavorite={() => handleToggleFavorite(link.id)}
+                    onDelete={() => handleDeleteLink(link.id)}
+                    onEdit={handleEditLink} // 변경
+                    folders={folders} // 변경: ModalMoveLink에 폴더 목록 전달
+                  />
+                ))
+              ) : (
+                <div className={styles.noLinks}>저장된 링크가 없습니다.</div> // 추가
+              )}
             </div>
           )}
           <Pagination

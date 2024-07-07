@@ -1,24 +1,29 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useState } from "react";
+import Image from "next/image";
 import styles from "@/styles/LinkCard.module.css";
 import kebab from "@/public/asset/link/Kebab.png";
 import Star_default from "@/public/asset/link/Star_default.png";
 import Star_selected from "@/public/asset/link/Star_selected.png";
 import defaultImage from "@/public/asset/link/No_image.png"; // 기본 이미지
 import ModalDeleteLink from "@/components/Modal/ModalDeleteLink";
-import Image from "next/image";
+import ModalMoveLink from "@/components/Modal/ModalMoveLink"; // 변경
 
-const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
-  const { id, title, description, createdAt, favorite, imageSource, url } =
-    link;
+const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite, folders }) => { // 변경
+  const {
+    id,
+    title,
+    description,
+    createdAt,
+    isFavorite,
+    imageSource,
+    image_source,
+    url,
+  } = link;
+  const [isStar, setIsStar] = useState(isFavorite);
   const [isSettingMenu, setIsSettingMenu] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [starImage, setStarImage] = useState(
-    favorite ? Star_selected : Star_default
-  );
-
-  useEffect(() => {
-    setStarImage(favorite ? Star_selected : Star_default);
-  }, [favorite]);
+  const [isMoveModalOpen, setIsMoveModalOpen] = useState(false); // 변경
 
   const onStarClick = (e) => {
     e.stopPropagation();
@@ -77,6 +82,16 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
     window.open(url, "_blank");
   };
 
+  const handleMoveLink = (e) => { // 변경
+    e.stopPropagation();
+    setIsMoveModalOpen(true);
+  };
+
+  const handleMove = async (newFolderId) => { // 변경
+    await onEdit(link, newFolderId);
+    setIsMoveModalOpen(false);
+  };
+
   return (
     <>
       <li className={styles.card} onClick={handleCardClick}>
@@ -119,7 +134,7 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
                 <li className={styles.cardSettingMenu} onClick={handleDelete}>
                   삭제하기
                 </li>
-                <li className={styles.cardSettingMenu} onClick={onEdit}>
+                <li className={styles.cardSettingMenu} onClick={handleMoveLink}>
                   수정하기
                 </li>
               </ul>
@@ -149,6 +164,15 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite }) => {
           linkName={title}
         />
       )}
+      {isMoveModalOpen && (
+        <ModalMoveLink
+          onClose={() => setIsMoveModalOpen(false)}
+          onMove={handleMove}
+          folders={folders}
+          linkName={title}
+        />
+      )}
+
     </>
   );
 };
