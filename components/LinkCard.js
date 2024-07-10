@@ -64,7 +64,8 @@ const LinkCard = ({ link, onEdit, onDelete, onToggleFavorite, folders }) => {
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = (e) => {
+    e.stopPropagation();
     setIsDeleteModalOpen(true);
   };
 
