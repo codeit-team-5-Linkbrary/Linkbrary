@@ -7,7 +7,7 @@
   overflow: hidden;
   filter: drop-shadow(0px 5px 25px rgba(0, 0, 0, 0.08));
   background: var(--white);
-  transition: transform 0.3s, background-color 0.3s, border-color 0.3s; 
+  transition: transform 0.3s, background-color 0.3s, border-color 0.3s;
 }
 
 .card:hover {
@@ -26,6 +26,7 @@
 
 .cardImage {
   position: relative;
+  height: 200px;
 }
 
 .cardStarWrap {
@@ -95,7 +96,7 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
-  height: 49px;
+  height: 22px;
 }
 
 .cardCreatedAt {
@@ -110,4 +111,5 @@
 .cardMonth,
 .cardDay {
   display: inline-block;
+  font-size: 14px;
 }
