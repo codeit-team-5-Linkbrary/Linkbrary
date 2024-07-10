@@ -134,7 +134,14 @@ const LinkPage = () => {
     try {
       await deleteLink(token, link.id);
       await createLink(token, link.url, newFolderId);
-      const updatedLinks = await fetchLinks(token);
+
+      // 현재 폴더의 링크를 업데이트된 상태로 불러옴
+      let updatedLinks;
+      if (activeButton === "all") {
+        updatedLinks = await fetchLinks(token);
+      } else {
+        updatedLinks = await getLinksByFolderId(token, activeButton);
+      }
       setLinks(updatedLinks);
     } catch (error) {
       alert("링크 이동 중 오류가 발생했습니다.");
