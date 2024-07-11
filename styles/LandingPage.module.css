@@ -3,20 +3,28 @@
 }
 
 .header {
-  background-image: url("../public/asset/LandingHeader.png");
-  background-repeat: no-repeat;
-  background-position-x: center;
-  background-position-y: bottom;
-  background-size: 80%;
   height: 953px;
   text-align: center;
   padding-top: 70px;
+}
+
+.landingHeader {
+  position: relative;
+  max-width: 1200px;
+  max-height: 590px;
+  width: 100%;
+  height: 100%;
+  margin: 40px auto 0;
 }
 
 .header h1 {
   margin-bottom: 40px;
   font-size: 64px;
   line-height: 80px;
+}
+
+.header h1 br:nth-of-type(2) {
+  display: none;
 }
 
 .header span {
@@ -114,6 +122,14 @@
     height: 756px;
   }
 
+  .landingHeader {
+    max-width: 698px;
+    max-height: 343px;
+    width: 100%;
+    height: 100%;
+    margin: 10px auto 0;
+  }
+
   .contents {
     margin: 80px auto 0;
     padding: 0 33px;
@@ -137,6 +153,10 @@
     max-height: 315px;
     width: 100%;
   }
+
+  .header h1 br:nth-of-type(2) {
+    display: block;
+  }
 }
 
 /* 모바일 */
@@ -144,6 +164,14 @@
   .header {
     height: 399px;
     padding-top: 28px;
+  }
+
+  .landingHeader {
+    max-width: 325px;
+    max-height: 160px;
+    width: 100%;
+    height: 100%;
+    margin: 10px auto 0;
   }
 
   .header h1 {

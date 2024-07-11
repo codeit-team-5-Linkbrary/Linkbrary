@@ -38,11 +38,20 @@ function LandingPage() {
           <div className={styles.header}>
             <h1>
               <span>세상의 모든 정보</span>를<br />
-              쉽게 저장하고 관리해 보세요
+              쉽게 저장하고
+              <br /> 관리해 보세요
             </h1>
             <Button variant="LinkAdd" onClick={handleLinkAddClick}>
               링크추가하기
             </Button>
+            <div className={styles.landingHeader}>
+              <Image
+                src="/asset/LandingHeader.png"
+                alt={"저장이미지"}
+                fill
+                style={{ objectFit: "cover" }}
+              />
+            </div>
           </div>
         </div>
       </div>
