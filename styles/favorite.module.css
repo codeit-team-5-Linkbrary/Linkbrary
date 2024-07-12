@@ -1,0 +1,27 @@
+.favoritePage {
+  height: 128px;
+  background: var(--gray-100);
+}
+
+.favorite {
+  text-align: center;
+}
+
+.favoriteImg {
+  margin-top: 10px;
+}
+
+.link {
+  min-height: 500px;
+}
+
+@media (max-width: 390px) {
+  .favoriteImg {
+    width: 150px;
+    height: 38px;
+  }
+
+  .link {
+    min-height: 550px;
+  }
+}

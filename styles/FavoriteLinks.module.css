@@ -1,0 +1,18 @@
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1125px;
+  padding: 0 32.5px;
+  width: auto;
+  gap: 19px;
+  margin: 40px auto 40px;
+}
+
+.notLink {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+  margin: 40px;
+  min-height: 350px;
+}

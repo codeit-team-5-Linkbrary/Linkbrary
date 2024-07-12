@@ -1,0 +1,115 @@
+.card {
+  position: relative;
+  width: 340px;
+  height: 334px;
+  list-style: none;
+  border-radius: 15px;
+  overflow: hidden;
+  filter: drop-shadow(0px 5px 25px rgba(0, 0, 0, 0.08));
+  background: var(--white);
+  transition: transform 0.3s, background-color 0.3s, border-color 0.3s;
+}
+
+.card:hover {
+  cursor: pointer;
+  border: 2px solid var(--primary); /* 변경: hover 시 테두리 색상 변경 */
+  transform: scale(1.05); /* 변경: hover 시 이미지 확대 */
+}
+
+.card:active {
+  background-color: var(--gray-200); /* 변경: active 시 배경색 변경 */
+}
+
+.cardImage img {
+  width: 100%;
+}
+
+.cardImage {
+  position: relative;
+  height: 200px;
+}
+
+.cardStarWrap {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.cardMenuList {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 20px;
+  gap: 10px;
+}
+
+.cardMenuTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.cardUpdateAt {
+  height: 17px;
+  font-size: 13px;
+  color: #666666;
+}
+
+.cardSettingButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.cardSettingList {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 4px;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  width: 30%;
+  background: #ffffff;
+  box-shadow: 0px 2px 8px rgba(51, 50, 54, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.cardSettingMenu {
+  padding: 10px 20px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cardSettingMenu:hover {
+  background-color: var(--gray-200);
+  color: var(--primary);
+}
+
+.cardDescription {
+  color: #000000;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  height: 22px;
+}
+
+.cardCreatedAt {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16.71px;
+  font-size: 12px;
+  color: #333333;
+}
+
+.cardFullYear,
+.cardMonth,
+.cardDay {
+  display: inline-block;
+  font-size: 14px;
+}

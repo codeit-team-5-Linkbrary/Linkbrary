@@ -1,0 +1,21 @@
+.Login {
+  width: 210px;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.SignupLine {
+  text-align: center;
+}
+
+.Signup {
+  display: flex;
+  white-space: nowrap;
+  width: 230px;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.Signuplink {
+  padding-left: 20px;
+}
